@@ -30,17 +30,31 @@
         <p class="eyebrow">Multi-client dashboard</p>
         <h1 id="page-title">Campaign reporting, all in one place.</h1>
         <p class="intro__copy">
-          The dashboard foundation is ready. Client selection and reporting data
-          will be connected in the next step.
+          Choose a client to begin. Campaign reporting will be connected after
+          the client-selection flow is verified.
         </p>
       </section>
 
-      <section class="container" aria-label="Dashboard status">
-        <div class="status-card">
-          <div class="status-card__icon" aria-hidden="true">✓</div>
-          <div>
-            <h2>Base dashboard ready</h2>
-            <p id="app-status">Preparing the reporting workspace.</p>
+      <section class="container" aria-labelledby="client-selector-title">
+        <div class="selector-card">
+          <div class="selector-card__heading">
+            <div class="selector-card__step" aria-hidden="true">1</div>
+            <div>
+              <p class="section-label">Report setup</p>
+              <h2 id="client-selector-title">Select a client</h2>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="client-select">Client</label>
+            <div class="select-wrap">
+              <select id="client-select" name="client" disabled>
+                <option value="">Loading clients…</option>
+              </select>
+            </div>
+            <p id="client-status" class="field-status" aria-live="polite">
+              Loading the active client list.
+            </p>
           </div>
         </div>
       </section>
