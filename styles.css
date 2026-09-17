@@ -1230,9 +1230,9 @@ tbody tr:hover {
   }
 
   .report-card--trend .chart-wrap--trend {
-    height: 2.75in !important;
-    min-height: 2.75in !important;
-    max-height: 2.75in !important;
+    height: 2.35in !important;
+    min-height: 2.35in !important;
+    max-height: 2.35in !important;
     overflow: hidden;
   }
 
