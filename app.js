@@ -4,6 +4,7 @@ const state = {
   clients: [],
   selectedClientId: null,
   reportData: null,
+  adReportData: null,
   startDate: null,
   endDate: null,
   dateBounds: { min: null, max: null },
@@ -197,6 +198,7 @@ function destroyCharts() {
 function resetReport() {
   destroyCharts();
   state.reportData = null;
+  state.adReportData = null;
   state.startDate = null;
   state.endDate = null;
   state.dateBounds = { min: null, max: null };
@@ -269,7 +271,15 @@ function validateReportPayload(data, requestedClientId) {
     typeof data.platforms === "object"
   );
 }
-
+function validateAdReportPayload(data, requestedClientId) {
+  return (
+    data &&
+    data.client?.client_id === requestedClientId &&
+    typeof data.client?.client_name === "string" &&
+    data.platforms &&
+    typeof data.platforms === "object"
+  );
+}
 function initializeReportState() {
   const dates = [];
 
@@ -308,6 +318,143 @@ async function loadReport(clientId) {
     setStatus("The campaign-report configuration is unavailable.", "error");
     return;
   }
+
+  const requestedClientId = clientId;
+
+  dom.clientSelect.disabled = true;
+  dom.report.setAttribute("aria-busy", "true");
+  dom.report.hidden = true;
+  dom.welcomePanel.hidden = false;
+  dom.printButton.disabled = true;
+
+  setReportControlsEnabled(false);
+  setStatus("Loading reporting data…", "loading");
+
+  try {
+    // -----------------------------
+    // Campaign report
+    // -----------------------------
+    const campaignUrl = new URL(window.REPORT_CONFIG.campaignApiUrl);
+    campaignUrl.searchParams.set("client_id", requestedClientId);
+
+    const campaignRequest = fetch(campaignUrl, {
+      headers: { Accept: "application/json" }
+    }).then(async (response) => {
+      if (!response.ok) {
+        throw new Error(
+          `Campaign request failed with status ${response.status}.`
+        );
+      }
+
+      return response.json();
+    });
+
+    // -----------------------------
+    // Ad / creative report
+    // -----------------------------
+    let adRequest = Promise.resolve(null);
+
+    if (window.REPORT_CONFIG?.adApiUrl) {
+      const adUrl = new URL(window.REPORT_CONFIG.adApiUrl);
+      adUrl.searchParams.set("client_id", requestedClientId);
+
+      adRequest = fetch(adUrl, {
+        headers: { Accept: "application/json" }
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Ad report request failed with status ${response.status}.`
+            );
+          }
+
+          return response.json();
+        })
+        .catch((error) => {
+          console.error("Unable to load the ad-level report.", error);
+
+          // Do not break the normal campaign report
+          // if ad-level data fails.
+          return null;
+        });
+    }
+
+    // Fetch both at the same time
+    const [campaignData, adData] = await Promise.all([
+      campaignRequest,
+      adRequest
+    ]);
+
+    // -----------------------------
+    // Validate campaign data
+    // -----------------------------
+    if (!validateReportPayload(campaignData, requestedClientId)) {
+      throw new Error(
+        "The campaign response did not match the selected client."
+      );
+    }
+
+    // User may have changed clients while requests were loading
+    if (state.selectedClientId !== requestedClientId) {
+      return;
+    }
+
+    // -----------------------------
+    // Store campaign data
+    // -----------------------------
+    state.reportData = campaignData;
+
+    // -----------------------------
+    // Store ad / creative data
+    // -----------------------------
+    if (
+      adData &&
+      validateAdReportPayload(adData, requestedClientId)
+    ) {
+      state.adReportData = adData;
+    } else {
+      state.adReportData = null;
+
+      if (adData) {
+        console.warn(
+          "The ad-level response did not match the selected client."
+        );
+      }
+    }
+
+    // -----------------------------
+    // Continue existing dashboard
+    // -----------------------------
+    initializeReportState();
+
+    dom.welcomePanel.hidden = true;
+    dom.report.hidden = false;
+
+    renderReport();
+
+    // Temporary testing
+    console.log("Campaign report loaded:", state.reportData);
+    console.log("Ad / creative report loaded:", state.adReportData);
+  } catch (error) {
+    console.error("Unable to load the campaign report.", error);
+
+    destroyCharts();
+
+    state.reportData = null;
+    state.adReportData = null;
+
+    dom.report.hidden = true;
+    dom.welcomePanel.hidden = false;
+
+    setStatus(
+      "The campaign report could not be loaded. Choose the client again to retry.",
+      "error"
+    );
+  } finally {
+    dom.clientSelect.disabled = false;
+    dom.report.setAttribute("aria-busy", "false");
+  }
+}
 
   const requestedClientId = clientId;
   dom.clientSelect.disabled = true;
