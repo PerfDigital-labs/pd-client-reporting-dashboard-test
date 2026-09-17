@@ -110,19 +110,12 @@ input:disabled {
   text-decoration: none;
 }
 
-.brand__mark {
+.brand__logo {
   width: 58px;
   height: 42px;
-  display: grid;
-  place-items: center;
-  border-right: 1px solid var(--border);
-  color: var(--pd-blue);
-  font-size: 1.4rem;
-  font-weight: 900;
-  font-style: italic;
-  letter-spacing: -0.08em;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
-
 .brand__text {
   display: grid;
   gap: 0.1rem;
