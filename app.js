@@ -46,7 +46,15 @@ const dom = {
   videoSteps: document.querySelector("#video-steps"),
   metaSection: document.querySelector("#meta-section"),
   metaSummary: document.querySelector("#meta-summary"),
-  metaCampaignBody: document.querySelector("#meta-campaign-body")
+  metaCampaignBody: document.querySelector("#meta-campaign-body"),
+
+  metaAdSection: document.querySelector("#meta-ad-section"),
+  metaAdSummary: document.querySelector("#meta-ad-summary"),
+  metaAdBody: document.querySelector("#meta-ad-body"),
+
+  illuminCreativeSection: document.querySelector("#illumin-creative-section"),
+  illuminCreativeSummary: document.querySelector("#illumin-creative-summary"),
+  illuminCreativeBody: document.querySelector("#illumin-creative-body")
 };
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -2294,7 +2302,211 @@ function renderMetaSection() {
     ...tableRows
   );
 }
+function aggregateMetaAds(rows) {
+  const ads = new Map();
 
+  for (const row of rows) {
+    const id = String(row.ad_id ?? "");
+    const name = String(row.ad_name ?? "").trim();
+    const key = id || name || "unlabeled";
+
+    if (!ads.has(key)) {
+      ads.set(key, {
+        id,
+        name: name || id || "Unlabeled ad",
+        campaign_name: String(row.campaign_name ?? "").trim(),
+        adset_name: String(row.adset_name ?? "").trim(),
+        impressions: 0,
+        clicks: 0,
+        inline_link_clicks: 0,
+        spend: 0
+      });
+    }
+
+    const ad = ads.get(key);
+
+    ad.impressions += toNumber(row.impressions);
+    ad.clicks += toNumber(row.clicks);
+    ad.inline_link_clicks += toNumber(row.inline_link_clicks);
+    ad.spend += toNumber(row.spend);
+  }
+
+  return [...ads.values()].sort(
+    (first, second) => second.impressions - first.impressions
+  );
+}
+
+function aggregateIlluminCreatives(rows) {
+  const creatives = new Map();
+
+  for (const row of rows) {
+    const id = String(row.creative_id ?? "");
+    const name = String(row.creative_name ?? "").trim();
+    const key = id || name || "unlabeled";
+
+    if (!creatives.has(key)) {
+      creatives.set(key, {
+        id,
+        name: name || id || "Unlabeled creative",
+        creative_type: String(row.creative_type ?? "").trim(),
+        journey_name: String(row.journey_name ?? "").trim(),
+        views: 0,
+        clicks: 0,
+        conversions: 0,
+        video_complete: 0
+      });
+    }
+
+    const creative = creatives.get(key);
+
+    creative.views += toNumber(row.views);
+    creative.clicks += toNumber(row.clicks);
+    creative.conversions += toNumber(row.conversions);
+    creative.video_complete += toNumber(row.video_complete);
+  }
+
+  return [...creatives.values()].sort(
+    (first, second) => second.views - first.views
+  );
+}
+
+function appendEntityNameCell(row, name, id, detail) {
+  const cell = document.createElement("td");
+
+  const nameElement = document.createElement("strong");
+  nameElement.className = "campaign-name";
+  nameElement.textContent = name;
+
+  cell.append(nameElement);
+
+  if (detail) {
+    const detailElement = document.createElement("span");
+    detailElement.className = "campaign-id";
+    detailElement.textContent = detail;
+    cell.append(detailElement);
+  }
+
+  if (id) {
+    const idElement = document.createElement("span");
+    idElement.className = "campaign-id";
+    idElement.textContent = id;
+    cell.append(idElement);
+  }
+
+  row.append(cell);
+}
+
+function renderMetaAdSection() {
+  const rows = filteredMetaAdRows();
+
+  const showSection =
+    activePlatforms().includes("meta") &&
+    rows.length > 0;
+
+  dom.metaAdSection.hidden = !showSection;
+
+  if (!showSection) {
+    return;
+  }
+
+  const ads = aggregateMetaAds(rows);
+  const displayedAds = ads.slice(0, 10);
+
+  const impressions = sumField(rows, "impressions");
+  const websiteClicks = sumField(rows, "inline_link_clicks");
+
+  dom.metaAdSummary.textContent =
+    `${formatNumber(ads.length)} ads · ` +
+    `${formatNumber(impressions)} impressions · ` +
+    `${formatNumber(websiteClicks)} website clicks · ` +
+    `showing top ${formatNumber(displayedAds.length)} by impressions`;
+
+  const tableRows = displayedAds.map((ad) => {
+    const row = document.createElement("tr");
+
+    appendEntityNameCell(
+      row,
+      ad.name,
+      ad.id,
+      [ad.campaign_name, ad.adset_name].filter(Boolean).join(" · ")
+    );
+
+    appendValueCell(row, formatNumber(ad.impressions));
+    appendValueCell(row, formatNumber(ad.clicks));
+    appendValueCell(row, formatNumber(ad.inline_link_clicks));
+
+    appendValueCell(
+      row,
+      formatPercent(
+        safeDivide(ad.inline_link_clicks, ad.impressions),
+        2
+      )
+    );
+
+    return row;
+  });
+
+  dom.metaAdBody.replaceChildren(...tableRows);
+}
+
+function renderIlluminCreativeSection() {
+  const rows = filteredIlluminCreativeRows();
+
+  const showSection =
+    activePlatforms().includes("illumin") &&
+    rows.length > 0;
+
+  dom.illuminCreativeSection.hidden = !showSection;
+
+  if (!showSection) {
+    return;
+  }
+
+  const creatives = aggregateIlluminCreatives(rows);
+  const displayedCreatives = creatives.slice(0, 10);
+
+  const views = sumField(rows, "views");
+  const clicks = sumField(rows, "clicks");
+  const conversions = sumField(rows, "conversions");
+
+  dom.illuminCreativeSummary.textContent =
+    `${formatNumber(creatives.length)} creatives · ` +
+    `${formatNumber(views)} views · ` +
+    `${formatNumber(clicks)} clicks · ` +
+    `${formatNumber(conversions)} conversions · ` +
+    `showing top ${formatNumber(displayedCreatives.length)} by views`;
+
+  const tableRows = displayedCreatives.map((creative) => {
+    const row = document.createElement("tr");
+
+    appendEntityNameCell(
+      row,
+      creative.name,
+      creative.id,
+      [creative.creative_type, creative.journey_name]
+        .filter(Boolean)
+        .join(" · ")
+    );
+
+    appendValueCell(row, formatNumber(creative.views));
+    appendValueCell(row, formatNumber(creative.clicks));
+
+    appendValueCell(
+      row,
+      formatPercent(
+        safeDivide(creative.clicks, creative.views),
+        3
+      )
+    );
+
+    appendValueCell(row, formatNumber(creative.conversions));
+    appendValueCell(row, formatNumber(creative.video_complete));
+
+    return row;
+  });
+
+  dom.illuminCreativeBody.replaceChildren(...tableRows);
+}
 function updatePrintHeader() {
   if (!state.reportData) {
     return;
@@ -2432,6 +2644,8 @@ function renderReport() {
   renderPlatformMix();
   renderIlluminSection();
   renderMetaSection();
+  renderIlluminCreativeSection();
+  renderMetaAdSection();
 
   setStatus(
     `${state.reportData.client.client_name} · ${formatDateRange(
