@@ -1148,8 +1148,8 @@ tbody tr:hover {
 
   .print-chart-group {
     display: block;
-    break-before: page;
-    break-inside: avoid;
+    break-before: auto;
+    break-inside: auto;
   }
 
   .report-summary,
@@ -1295,6 +1295,6 @@ tbody tr:hover {
   }
 
   .platform-section {
-    break-before: page;
+    break-before: auto;
   }
 }
