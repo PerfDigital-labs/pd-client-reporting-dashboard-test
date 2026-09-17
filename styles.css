@@ -1147,9 +1147,7 @@ tbody tr:hover {
   }
 
   .print-chart-group {
-    display: block;
-    break-before: auto;
-    break-inside: auto;
+    display: contents;
   }
 
   .report-summary,
@@ -1233,7 +1231,8 @@ tbody tr:hover {
 
   .report-card--trend .chart-wrap--trend {
     height: 2.75in !important;
-    min-height: 2.75in;
+    min-height: 2.75in !important;
+    max-height: 2.75in !important;
     overflow: hidden;
   }
 
