@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Performance Digital multi-client reporting dashboard prototype."
-    />
+    <meta name="description" content="Performance Digital multi-client reporting dashboard prototype." />
     <title>Performance Digital | Client Reporting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -16,11 +16,14 @@
         <a class="brand" href="./" aria-label="Performance Digital reporting home">
           <span class="brand__mark" aria-hidden="true">PD</span>
           <span class="brand__text">
-            <span>Paid media · Live client dashboard</span>
-            <strong>Performance by Client</strong>
+            <span>Performance Digital</span>
+            <strong>Client reporting</strong>
           </span>
         </a>
-        <span class="prototype-badge">Prototype</span>
+        <div class="header-meta">
+          <span class="live-indicator"><span aria-hidden="true"></span>BigQuery reporting</span>
+          <span class="prototype-badge">Internal prototype</span>
+        </div>
       </div>
     </header>
 
@@ -28,41 +31,20 @@
       <h1 class="sr-only">Performance Digital client reporting dashboard</h1>
 
       <section class="filter-panel" aria-label="Report filters">
-        <div class="filter-panel__row">
-          <div class="date-control">
-            <label for="start-date">From</label>
-            <input id="start-date" type="date" disabled />
+        <div class="filter-panel__topline">
+          <div>
+            <p class="section-kicker">Report controls</p>
+            <p class="filter-panel__hint">Choose a client, reporting period, and platform view.</p>
           </div>
-
-          <div class="date-control">
-            <label for="end-date">To</label>
-            <input id="end-date" type="date" disabled />
-          </div>
-
-          <div class="preset-group" aria-label="Date range presets">
-            <button class="filter-chip is-active" type="button" data-preset="all" disabled>
-              All data
-            </button>
-            <button class="filter-chip" type="button" data-preset="30" disabled>
-              Last 30 days
-            </button>
-            <button class="filter-chip" type="button" data-preset="90" disabled>
-              Last 90 days
-            </button>
-            <button class="filter-chip" type="button" data-preset="ytd" disabled>
-              Year to date
-            </button>
-          </div>
+          <button id="print-report" class="print-button" type="button" disabled>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17">
+              <path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z" />
+            </svg>
+            Print / Save PDF
+          </button>
         </div>
 
-        <div class="filter-panel__row filter-panel__row--secondary">
-          <div id="platform-filter" class="segmented-control" hidden>
-            <span class="segmented-control__label">Platform</span>
-            <button class="segment is-active" type="button" data-platform="all">All</button>
-            <button class="segment" type="button" data-platform="illumin">Illumin</button>
-            <button class="segment" type="button" data-platform="meta">Meta</button>
-          </div>
-
+        <div class="filter-panel__row">
           <div class="client-control">
             <label for="client-select">Client</label>
             <span class="select-wrap">
@@ -71,24 +53,56 @@
               </select>
             </span>
           </div>
+          <div class="date-control">
+            <label for="start-date">From</label>
+            <input id="start-date" type="date" disabled />
+          </div>
+          <div class="date-control">
+            <label for="end-date">To</label>
+            <input id="end-date" type="date" disabled />
+          </div>
         </div>
 
-        <p id="app-status" class="app-status" data-type="loading" aria-live="polite">
-          Loading the active client list.
-        </p>
+        <div class="filter-panel__row filter-panel__row--secondary">
+          <div class="preset-group" aria-label="Date range presets">
+            <button class="filter-chip is-active" type="button" data-preset="all" disabled>All data</button>
+            <button class="filter-chip" type="button" data-preset="30" disabled>Last 30 days</button>
+            <button class="filter-chip" type="button" data-preset="90" disabled>Last 90 days</button>
+            <button class="filter-chip" type="button" data-preset="ytd" disabled>Year to date</button>
+          </div>
+          <div id="platform-filter" class="segmented-control" hidden>
+            <span class="segmented-control__label">Platform</span>
+            <button class="segment is-active" type="button" data-platform="all">All</button>
+            <button class="segment" type="button" data-platform="illumin">Illumin</button>
+            <button class="segment" type="button" data-platform="meta">Meta</button>
+          </div>
+        </div>
+
+        <p id="app-status" class="app-status" data-type="loading" aria-live="polite">Loading the active client list.</p>
       </section>
 
       <section id="welcome-panel" class="welcome-panel">
         <span class="welcome-panel__icon" aria-hidden="true">↗</span>
         <div>
           <h2>Select a client to begin</h2>
-          <p>The dashboard will load the reporting data currently available through n8n.</p>
+          <p>The dashboard will request the latest available reporting data from BigQuery through n8n.</p>
         </div>
       </section>
 
       <section id="report" class="report" hidden aria-busy="false">
+        <div class="print-report-header" aria-hidden="true">
+          <div class="print-report-header__brand">Performance Digital</div>
+          <div>
+            <strong id="print-client-name">Client performance report</strong>
+            <span id="print-report-meta">—</span>
+          </div>
+        </div>
+
         <div class="report-context">
-          <strong id="report-period">—</strong>
+          <div>
+            <span class="report-context__label">Reporting period</span>
+            <strong id="report-period">—</strong>
+          </div>
           <div class="report-context__meta">
             <span id="report-platforms" class="platform-badges"></span>
             <span id="report-freshness">—</span>
@@ -104,20 +118,31 @@
           <section class="report-card report-summary" aria-labelledby="client-report-title">
             <div class="report-heading">
               <div>
-                <p class="section-kicker">Client performance</p>
+                <p class="section-kicker">Performance overview</p>
                 <h2 id="client-report-title">—</h2>
               </div>
               <span id="report-row-count" class="report-heading__detail">—</span>
             </div>
-
             <div id="kpi-grid" class="kpi-grid"></div>
+          </section>
+
+          <section id="highlights-section" class="report-card highlights-section" aria-labelledby="highlights-title">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">At a glance</p>
+                <h3 id="highlights-title">Performance highlights</h3>
+                <p>Factual observations calculated from the selected reporting view.</p>
+              </div>
+            </div>
+            <div id="highlights-grid" class="highlights-grid"></div>
           </section>
 
           <section class="report-card" aria-labelledby="trend-title">
             <div class="section-heading">
               <div>
-                <h3 id="trend-title">Daily delivery</h3>
-                <p>Impressions and platform-specific click metrics by day.</p>
+                <p class="section-kicker">Delivery over time</p>
+                <h3 id="trend-title">Daily campaign activity</h3>
+                <p>Impressions and each platform’s applicable click metric by day.</p>
               </div>
             </div>
             <div class="chart-wrap chart-wrap--trend">
@@ -128,8 +153,9 @@
           <section id="platform-mix-section" class="report-card" hidden aria-labelledby="mix-title">
             <div class="section-heading">
               <div>
+                <p class="section-kicker">Channel view</p>
                 <h3 id="mix-title">Platform mix</h3>
-                <p>Share of impressions in the selected reporting period.</p>
+                <p>Share of impressions only; platform conversions remain separate.</p>
               </div>
             </div>
             <div class="mix-layout">
@@ -140,7 +166,7 @@
             </div>
           </section>
 
-          <section id="illumin-section" class="report-card platform-section" hidden>
+          <section id="illumin-section" class="report-card platform-section platform-section--illumin" hidden>
             <div class="section-heading section-heading--platform">
               <div>
                 <span class="platform-badge platform-badge--illumin">Illumin</span>
@@ -148,7 +174,6 @@
                 <p id="illumin-summary">—</p>
               </div>
             </div>
-
             <div class="table-scroll">
               <table>
                 <thead>
@@ -166,11 +191,10 @@
                 <tbody id="illumin-campaign-body"></tbody>
               </table>
             </div>
-
             <div id="illumin-video" class="video-panel" hidden>
               <div class="section-heading">
                 <div>
-                  <h4>Illumin video delivery</h4>
+                  <h4>Illumin video completion</h4>
                   <p>Quartile rates use video starts as the denominator.</p>
                 </div>
               </div>
@@ -178,7 +202,7 @@
             </div>
           </section>
 
-          <section id="meta-section" class="report-card platform-section" hidden>
+          <section id="meta-section" class="report-card platform-section platform-section--meta" hidden>
             <div class="section-heading section-heading--platform">
               <div>
                 <span class="platform-badge platform-badge--meta">Meta</span>
@@ -186,7 +210,6 @@
                 <p id="meta-summary">—</p>
               </div>
             </div>
-
             <div class="table-scroll">
               <table>
                 <thead>
@@ -201,10 +224,19 @@
                 <tbody id="meta-campaign-body"></tbody>
               </table>
             </div>
+            <p class="section-note">Meta conversions are not included in the current generic campaign payload and are not inferred here.</p>
+          </section>
 
-            <p class="section-note">
-              Meta conversions are not included in the current generic campaign payload.
-            </p>
+          <section class="report-card methodology-card" aria-labelledby="method-title">
+            <div>
+              <p class="section-kicker">Report notes</p>
+              <h3 id="method-title">How to read this report</h3>
+            </div>
+            <div class="methodology-grid">
+              <p><strong>Source</strong><span>BigQuery reporting data delivered through the Performance Digital n8n workflow.</span></p>
+              <p><strong>Platform logic</strong><span>Illumin and Meta metrics remain separate. Only impressions are used in the cross-platform mix.</span></p>
+              <p><strong>Freshness</strong><span>The latest available platform date is shown above and may differ by source.</span></p>
+            </div>
           </section>
         </div>
       </section>
@@ -212,9 +244,7 @@
 
     <footer class="site-footer">
       <div class="dashboard-width">
-        <p>
-          Prototype powered by canonical PD client IDs and the Performance Digital n8n reporting API.
-        </p>
+        <p>Internal prototype · Canonical PD client IDs · BigQuery source of truth</p>
       </div>
     </footer>
 
