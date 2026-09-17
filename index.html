@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=7" />
+    <link rel="stylesheet" href="styles.css?v=8" />
   </head>
   <body>
     <header class="site-header">
@@ -234,7 +234,71 @@
             </div>
             <p class="section-note">Meta conversions are not included in the current generic campaign payload and are not inferred here.</p>
           </section>
+<section
+  id="illumin-creative-section"
+  class="report-card platform-section platform-section--illumin"
+  hidden
+>
+  <div class="section-heading section-heading--platform">
+    <div>
+      <span class="platform-badge platform-badge--illumin">Illumin</span>
+      <h3>Illumin creative performance</h3>
+      <p id="illumin-creative-summary">—</p>
+    </div>
+  </div>
 
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Creative</th>
+          <th scope="col">Views</th>
+          <th scope="col">Clicks</th>
+          <th scope="col">CTR</th>
+          <th scope="col">Conversions</th>
+          <th scope="col">Video completes</th>
+        </tr>
+      </thead>
+
+      <tbody id="illumin-creative-body"></tbody>
+    </table>
+  </div>
+
+  <p class="section-note">
+    Creative results use Illumin's creative-level reporting. Views are
+    preserved as the source delivery metric.
+  </p>
+</section>
+
+<section
+  id="meta-ad-section"
+  class="report-card platform-section platform-section--meta"
+  hidden
+>
+  <div class="section-heading section-heading--platform">
+    <div>
+      <span class="platform-badge platform-badge--meta">Meta</span>
+      <h3>Meta ad performance</h3>
+      <p id="meta-ad-summary">—</p>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Ad</th>
+          <th scope="col">Impressions</th>
+          <th scope="col">Clicks</th>
+          <th scope="col">Website clicks</th>
+          <th scope="col">Website Clicks CTR</th>
+        </tr>
+      </thead>
+
+      <tbody id="meta-ad-body"></tbody>
+    </table>
+  </div>
+</section>
           <section class="report-card methodology-card" aria-labelledby="method-title">
             <div>
               <p class="section-kicker">Report notes</p>
