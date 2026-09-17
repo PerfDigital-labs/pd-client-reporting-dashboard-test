@@ -187,6 +187,29 @@ function filteredRows(platform) {
       row.date <= state.endDate
   );
 }
+function filteredMetaAdRows() {
+  const rows =
+    state.adReportData?.platforms?.meta?.ad_daily ?? [];
+
+  return rows.filter(
+    (row) =>
+      typeof row.date === "string" &&
+      row.date >= state.startDate &&
+      row.date <= state.endDate
+  );
+}
+
+function filteredIlluminCreativeRows() {
+  const rows =
+    state.adReportData?.platforms?.illumin?.creative_daily ?? [];
+
+  return rows.filter(
+    (row) =>
+      typeof row.date === "string" &&
+      row.date >= state.startDate &&
+      row.date <= state.endDate
+  );
+}
 
 function setReportControlsEnabled(enabled) {
   dom.startDate.disabled = !enabled;
