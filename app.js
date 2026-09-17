@@ -14,6 +14,7 @@ const state = {
 
 const dom = {
   clientSelect: document.querySelector("#client-select"),
+  printButton: document.querySelector("#print-report"),
   appStatus: document.querySelector("#app-status"),
   startDate: document.querySelector("#start-date"),
   endDate: document.querySelector("#end-date"),
@@ -27,9 +28,12 @@ const dom = {
   reportPeriod: document.querySelector("#report-period"),
   reportPlatforms: document.querySelector("#report-platforms"),
   reportFreshness: document.querySelector("#report-freshness"),
+  printClientName: document.querySelector("#print-client-name"),
+  printReportMeta: document.querySelector("#print-report-meta"),
   clientReportTitle: document.querySelector("#client-report-title"),
   reportRowCount: document.querySelector("#report-row-count"),
   kpiGrid: document.querySelector("#kpi-grid"),
+  highlightsGrid: document.querySelector("#highlights-grid"),
   trendCanvas: document.querySelector("#trend-chart"),
   platformMixSection: document.querySelector("#platform-mix-section"),
   mixCanvas: document.querySelector("#mix-chart"),
@@ -200,6 +204,7 @@ function resetReport() {
   dom.report.hidden = true;
   dom.welcomePanel.hidden = false;
   dom.platformFilter.hidden = true;
+  dom.printButton.disabled = true;
   setReportControlsEnabled(false);
   setStatus(`${state.clients.length} active clients available.`, "success");
 }
@@ -309,6 +314,7 @@ async function loadReport(clientId) {
   dom.report.setAttribute("aria-busy", "true");
   dom.report.hidden = true;
   dom.welcomePanel.hidden = false;
+  dom.printButton.disabled = true;
   setReportControlsEnabled(false);
   setStatus("Loading campaign reporting data…", "loading");
 
@@ -564,6 +570,100 @@ function renderKpis() {
   }
 
   dom.kpiGrid.replaceChildren(...cards);
+}
+
+function createHighlightCard(platform, number, title, detail) {
+  const card = document.createElement("article");
+  card.className = `highlight-card highlight-card--${platform}`;
+
+  const numberElement = document.createElement("span");
+  numberElement.className = "highlight-card__number";
+  numberElement.textContent = number;
+
+  const titleElement = document.createElement("strong");
+  titleElement.textContent = title;
+
+  const detailElement = document.createElement("span");
+  detailElement.textContent = detail;
+
+  card.append(numberElement, titleElement, detailElement);
+  return card;
+}
+
+function renderHighlights() {
+  const cards = [];
+
+  if (activePlatforms().includes("illumin")) {
+    const rows = filteredRows("illumin");
+    const campaigns = aggregateCampaigns(rows, "illumin");
+    const topCampaign = campaigns[0];
+    const totalImpressions = sumField(rows, "impressions");
+
+    if (topCampaign) {
+      cards.push(
+        createHighlightCard(
+          "illumin",
+          cards.length + 1,
+          `${topCampaign.name} led Illumin delivery`,
+          `${formatNumber(topCampaign.impressions)} impressions · ${formatPercent(
+            safeDivide(topCampaign.impressions, totalImpressions),
+            1
+          )} of Illumin impressions`
+        )
+      );
+    }
+  }
+
+  if (activePlatforms().includes("meta")) {
+    const rows = filteredRows("meta");
+    const campaigns = aggregateCampaigns(rows, "meta");
+    const topCampaign = campaigns[0];
+    const totalImpressions = sumField(rows, "impressions");
+
+    if (topCampaign) {
+      cards.push(
+        createHighlightCard(
+          "meta",
+          cards.length + 1,
+          `${topCampaign.name} led Meta delivery`,
+          `${formatNumber(topCampaign.impressions)} impressions · ${formatPercent(
+            safeDivide(topCampaign.impressions, totalImpressions),
+            1
+          )} of Meta impressions`
+        )
+      );
+    }
+  }
+
+  if (
+    state.selectedPlatform === "all" &&
+    activePlatforms().includes("illumin") &&
+    activePlatforms().includes("meta")
+  ) {
+    const illuminImpressions = sumField(filteredRows("illumin"), "impressions");
+    const metaImpressions = sumField(filteredRows("meta"), "impressions");
+    const combinedImpressions = illuminImpressions + metaImpressions;
+    const leadingPlatform =
+      illuminImpressions >= metaImpressions
+        ? { name: "Illumin", value: illuminImpressions }
+        : { name: "Meta", value: metaImpressions };
+
+    if (combinedImpressions > 0) {
+      cards.push(
+        createHighlightCard(
+          "all",
+          cards.length + 1,
+          `${leadingPlatform.name} delivered the larger impression share`,
+          `${formatPercent(
+            safeDivide(leadingPlatform.value, combinedImpressions),
+            1
+          )} of impressions across the two available platforms`
+        )
+      );
+    }
+  }
+
+  dom.highlightsGrid.replaceChildren(...cards);
 }
 
 function dailyTotals(rows, fields) {
@@ -1009,6 +1109,40 @@ function renderMetaSection() {
   dom.metaCampaignBody.replaceChildren(...tableRows);
 }
 
+function updatePrintHeader() {
+  if (!state.reportData) {
+    return;
+  }
+
+  const platformLabel = activePlatforms()
+    .map((platform) => (platform === "illumin" ? "Illumin" : "Meta"))
+    .join(" + ");
+  const generatedAt = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit"
+  }).format(new Date());
+
+  dom.printClientName.textContent = `${state.reportData.client.client_name} · Performance report`;
+  dom.printReportMeta.textContent = `${formatDateRange(
+    state.startDate,
+    state.endDate
+  )} · ${platformLabel || "No platform data"} · Generated ${generatedAt}`;
+}
+
+function printReport() {
+  if (!state.reportData || dom.reportData.hidden) {
+    return;
+  }
+
+  updatePrintHeader();
+  state.trendChart?.resize();
+  state.mixChart?.resize();
+  window.print();
+}
+
 function renderReport() {
   if (!state.reportData) {
     return;
@@ -1030,10 +1164,12 @@ function renderReport() {
   dom.reportRowCount.textContent = `${formatNumber(rowCount)} daily campaign rows`;
   renderPlatformBadges();
   renderFreshness();
+  updatePrintHeader();
 
   const hasRows = rowCount > 0;
   dom.noDataPanel.hidden = hasRows;
   dom.reportData.hidden = !hasRows;
+  dom.printButton.disabled = !hasRows;
 
   if (!hasRows) {
     destroyCharts();
@@ -1042,6 +1178,7 @@ function renderReport() {
   }
 
   renderKpis();
+  renderHighlights();
   renderTrendChart();
   renderPlatformMix();
   renderIlluminSection();
@@ -1081,5 +1218,13 @@ for (const button of dom.platformButtons) {
     renderReport();
   });
 }
+
+dom.printButton.addEventListener("click", printReport);
+
+window.addEventListener("beforeprint", updatePrintHeader);
+window.addEventListener("afterprint", () => {
+  state.trendChart?.resize();
+  state.mixChart?.resize();
+});
 
 loadClients();
