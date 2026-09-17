@@ -1221,7 +1221,11 @@ for (const button of dom.platformButtons) {
 
 dom.printButton.addEventListener("click", printReport);
 
-window.addEventListener("beforeprint", updatePrintHeader);
+window.addEventListener("beforeprint", () => {
+  updatePrintHeader();
+  state.trendChart?.resize();
+  state.mixChart?.resize();
+});
 window.addEventListener("afterprint", () => {
   state.trendChart?.resize();
   state.mixChart?.resize();
