@@ -529,6 +529,11 @@ button:focus-visible {
   box-shadow: var(--shadow);
 }
 
+.print-overview-group,
+.print-chart-group {
+  display: contents;
+}
+
 .report-summary {
   border-top: 3px solid var(--navy-deep);
 }
@@ -1130,14 +1135,24 @@ tbody tr:hover {
   }
 
   .report-card {
-    margin-bottom: 0.12in;
-    padding: 0.14in;
+    margin-bottom: 0.08in;
+    padding: 0.11in;
     border-color: #ccd7dd;
     box-shadow: none;
   }
 
+  .print-overview-group {
+    display: block;
+    break-inside: avoid;
+  }
+
+  .print-chart-group {
+    display: block;
+    break-before: page;
+    break-inside: avoid;
+  }
+
   .report-summary,
-  .highlights-section,
   .methodology-card {
     break-inside: avoid;
   }
@@ -1163,46 +1178,82 @@ tbody tr:hover {
   }
 
   .kpi-card {
-    padding: 0.1in;
+    padding: 0.075in;
   }
 
   .kpi-card__value {
-    font-size: 17px;
+    font-size: 15px;
+  }
+
+  .highlights-section {
+    padding: 0.075in 0.09in;
+    break-inside: avoid;
+  }
+
+  .highlights-section .section-heading {
+    margin-bottom: 0.05in;
+  }
+
+  .highlights-section .section-heading p:not(.section-kicker) {
+    font-size: 6.5px;
+  }
+
+  .highlights-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.055in;
   }
 
   .highlight-card {
-    padding-block: 0.09in;
+    min-height: 0;
+    padding: 0.055in 0.06in 0.055in 0.28in;
+  }
+
+  .highlight-card__number {
+    top: 0.065in;
+    left: 0.06in;
+    width: 0.17in;
+    height: 0.17in;
+    font-size: 6px;
+  }
+
+  .highlight-card strong {
+    font-size: 7px;
+    line-height: 1.2;
+  }
+
+  .highlight-card span {
+    margin-top: 0.02in;
+    font-size: 6px;
+    line-height: 1.25;
   }
 
   .report-card--trend {
-    min-height: 8.25in;
-    break-before: page;
-    break-after: page;
     break-inside: avoid;
   }
 
   .report-card--trend .chart-wrap--trend {
-    height: 6.6in !important;
-    min-height: 6.6in;
+    height: 2.75in !important;
+    min-height: 2.75in;
     overflow: hidden;
   }
 
   #platform-mix-section {
-    min-height: 8.25in;
-    break-before: page;
-    break-after: page;
     break-inside: avoid;
   }
 
   #platform-mix-section .mix-layout {
-    grid-template-columns: 1fr;
-    gap: 0.25in;
+    grid-template-columns: 2.05in minmax(0, 1fr);
+    gap: 0.22in;
   }
 
   #platform-mix-section .chart-wrap--mix {
-    width: 3.5in;
-    height: 3.5in !important;
-    min-height: 3.5in;
+    width: 1.85in;
+    height: 1.85in !important;
+    min-height: 1.85in;
+  }
+
+  #platform-mix-section .mix-summary {
+    gap: 0.14in;
   }
 
   .chart-wrap canvas {
