@@ -1045,7 +1045,7 @@ tbody tr:hover {
 }
 
 @page {
-  size: landscape;
+  size: portrait;
   margin: 0.45in;
 }
 
@@ -1134,6 +1134,11 @@ tbody tr:hover {
     padding: 0.14in;
     border-color: #ccd7dd;
     box-shadow: none;
+  }
+
+  .report-summary,
+  .highlights-section,
+  .methodology-card {
     break-inside: avoid;
   }
 
@@ -1169,12 +1174,42 @@ tbody tr:hover {
     padding-block: 0.09in;
   }
 
-  .chart-wrap--trend {
-    height: 2.35in;
+  .report-card--trend {
+    min-height: 8.25in;
+    break-before: page;
+    break-after: page;
+    break-inside: avoid;
   }
 
-  .chart-wrap--mix {
-    height: 1.8in;
+  .report-card--trend .chart-wrap--trend {
+    height: 6.6in !important;
+    min-height: 6.6in;
+    overflow: hidden;
+  }
+
+  #platform-mix-section {
+    min-height: 8.25in;
+    break-before: page;
+    break-after: page;
+    break-inside: avoid;
+  }
+
+  #platform-mix-section .mix-layout {
+    grid-template-columns: 1fr;
+    gap: 0.25in;
+  }
+
+  #platform-mix-section .chart-wrap--mix {
+    width: 3.5in;
+    height: 3.5in !important;
+    min-height: 3.5in;
+  }
+
+  .chart-wrap canvas {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
   }
 
   .table-scroll {
