@@ -12,60 +12,213 @@
   </head>
   <body>
     <header class="site-header">
-      <div class="container site-header__inner">
+      <div class="dashboard-width site-header__inner">
         <a class="brand" href="./" aria-label="Performance Digital reporting home">
           <span class="brand__mark" aria-hidden="true">PD</span>
           <span class="brand__text">
-            <strong>Performance Digital</strong>
-            <span>Client Reporting</span>
+            <span>Paid media · Live client dashboard</span>
+            <strong>Performance by Client</strong>
           </span>
         </a>
-
         <span class="prototype-badge">Prototype</span>
       </div>
     </header>
 
-    <main class="page-shell">
-      <section class="container intro" aria-labelledby="page-title">
-        <p class="eyebrow">Multi-client dashboard</p>
-        <h1 id="page-title">Campaign reporting, all in one place.</h1>
-        <p class="intro__copy">
-          Choose a client to begin. Campaign reporting will be connected after
-          the client-selection flow is verified.
-        </p>
-      </section>
+    <main class="dashboard-width dashboard-shell">
+      <h1 class="sr-only">Performance Digital client reporting dashboard</h1>
 
-      <section class="container" aria-labelledby="client-selector-title">
-        <div class="selector-card">
-          <div class="selector-card__heading">
-            <div class="selector-card__step" aria-hidden="true">1</div>
-            <div>
-              <p class="section-label">Report setup</p>
-              <h2 id="client-selector-title">Select a client</h2>
-            </div>
+      <section class="filter-panel" aria-label="Report filters">
+        <div class="filter-panel__row">
+          <div class="date-control">
+            <label for="start-date">From</label>
+            <input id="start-date" type="date" disabled />
           </div>
 
-          <div class="form-field">
+          <div class="date-control">
+            <label for="end-date">To</label>
+            <input id="end-date" type="date" disabled />
+          </div>
+
+          <div class="preset-group" aria-label="Date range presets">
+            <button class="filter-chip is-active" type="button" data-preset="all" disabled>
+              All data
+            </button>
+            <button class="filter-chip" type="button" data-preset="30" disabled>
+              Last 30 days
+            </button>
+            <button class="filter-chip" type="button" data-preset="90" disabled>
+              Last 90 days
+            </button>
+            <button class="filter-chip" type="button" data-preset="ytd" disabled>
+              Year to date
+            </button>
+          </div>
+        </div>
+
+        <div class="filter-panel__row filter-panel__row--secondary">
+          <div id="platform-filter" class="segmented-control" hidden>
+            <span class="segmented-control__label">Platform</span>
+            <button class="segment is-active" type="button" data-platform="all">All</button>
+            <button class="segment" type="button" data-platform="illumin">Illumin</button>
+            <button class="segment" type="button" data-platform="meta">Meta</button>
+          </div>
+
+          <div class="client-control">
             <label for="client-select">Client</label>
-            <div class="select-wrap">
+            <span class="select-wrap">
               <select id="client-select" name="client" disabled>
                 <option value="">Loading clients…</option>
               </select>
-            </div>
-            <p id="client-status" class="field-status" aria-live="polite">
-              Loading the active client list.
-            </p>
+            </span>
           </div>
+        </div>
+
+        <p id="app-status" class="app-status" data-type="loading" aria-live="polite">
+          Loading the active client list.
+        </p>
+      </section>
+
+      <section id="welcome-panel" class="welcome-panel">
+        <span class="welcome-panel__icon" aria-hidden="true">↗</span>
+        <div>
+          <h2>Select a client to begin</h2>
+          <p>The dashboard will load the reporting data currently available through n8n.</p>
+        </div>
+      </section>
+
+      <section id="report" class="report" hidden aria-busy="false">
+        <div class="report-context">
+          <strong id="report-period">—</strong>
+          <div class="report-context__meta">
+            <span id="report-platforms" class="platform-badges"></span>
+            <span id="report-freshness">—</span>
+          </div>
+        </div>
+
+        <div id="no-data-panel" class="empty-panel" hidden>
+          <h2>No reporting rows in this date range</h2>
+          <p>Adjust the dates or choose All data to restore the available reporting period.</p>
+        </div>
+
+        <div id="report-data">
+          <section class="report-card report-summary" aria-labelledby="client-report-title">
+            <div class="report-heading">
+              <div>
+                <p class="section-kicker">Client performance</p>
+                <h2 id="client-report-title">—</h2>
+              </div>
+              <span id="report-row-count" class="report-heading__detail">—</span>
+            </div>
+
+            <div id="kpi-grid" class="kpi-grid"></div>
+          </section>
+
+          <section class="report-card" aria-labelledby="trend-title">
+            <div class="section-heading">
+              <div>
+                <h3 id="trend-title">Daily delivery</h3>
+                <p>Impressions and platform-specific click metrics by day.</p>
+              </div>
+            </div>
+            <div class="chart-wrap chart-wrap--trend">
+              <canvas id="trend-chart" aria-label="Daily campaign delivery chart"></canvas>
+            </div>
+          </section>
+
+          <section id="platform-mix-section" class="report-card" hidden aria-labelledby="mix-title">
+            <div class="section-heading">
+              <div>
+                <h3 id="mix-title">Platform mix</h3>
+                <p>Share of impressions in the selected reporting period.</p>
+              </div>
+            </div>
+            <div class="mix-layout">
+              <div class="chart-wrap chart-wrap--mix">
+                <canvas id="mix-chart" aria-label="Impression share by platform"></canvas>
+              </div>
+              <div id="mix-summary" class="mix-summary"></div>
+            </div>
+          </section>
+
+          <section id="illumin-section" class="report-card platform-section" hidden>
+            <div class="section-heading section-heading--platform">
+              <div>
+                <span class="platform-badge platform-badge--illumin">Illumin</span>
+                <h3>Illumin campaign performance</h3>
+                <p id="illumin-summary">—</p>
+              </div>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Campaign</th>
+                    <th scope="col">Impressions</th>
+                    <th scope="col">Clicks</th>
+                    <th scope="col">CTR</th>
+                    <th scope="col">Conversions</th>
+                    <th scope="col">Primary</th>
+                    <th scope="col">Secondary</th>
+                    <th scope="col">Tertiary</th>
+                  </tr>
+                </thead>
+                <tbody id="illumin-campaign-body"></tbody>
+              </table>
+            </div>
+
+            <div id="illumin-video" class="video-panel" hidden>
+              <div class="section-heading">
+                <div>
+                  <h4>Illumin video delivery</h4>
+                  <p>Quartile rates use video starts as the denominator.</p>
+                </div>
+              </div>
+              <div id="video-steps" class="video-steps"></div>
+            </div>
+          </section>
+
+          <section id="meta-section" class="report-card platform-section" hidden>
+            <div class="section-heading section-heading--platform">
+              <div>
+                <span class="platform-badge platform-badge--meta">Meta</span>
+                <h3>Meta campaign performance</h3>
+                <p id="meta-summary">—</p>
+              </div>
+            </div>
+
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Campaign</th>
+                    <th scope="col">Impressions</th>
+                    <th scope="col">Clicks</th>
+                    <th scope="col">Website clicks</th>
+                    <th scope="col">Website Clicks CTR</th>
+                  </tr>
+                </thead>
+                <tbody id="meta-campaign-body"></tbody>
+              </table>
+            </div>
+
+            <p class="section-note">
+              Meta conversions are not included in the current generic campaign payload.
+            </p>
+          </section>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <div class="container">
-        <p>Performance Digital reporting prototype</p>
+      <div class="dashboard-width">
+        <p>
+          Prototype powered by canonical PD client IDs and the Performance Digital n8n reporting API.
+        </p>
       </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="config.js"></script>
     <script src="app.js"></script>
   </body>
