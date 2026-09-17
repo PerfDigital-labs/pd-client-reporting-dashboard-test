@@ -1044,12 +1044,12 @@ tbody tr:hover {
   }
 }
 
-@page {
-  size: portrait;
-  margin: 0.45in;
-}
-
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
   :root {
     --shadow: none;
   }
