@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
   <body>
     <header class="site-header">
@@ -115,6 +115,7 @@
         </div>
 
         <div id="report-data">
+          <div class="print-overview-group">
           <section class="report-card report-summary" aria-labelledby="client-report-title">
             <div class="report-heading">
               <div>
@@ -136,7 +137,9 @@
             </div>
             <div id="highlights-grid" class="highlights-grid"></div>
           </section>
+          </div>
 
+          <div class="print-chart-group">
           <section class="report-card report-card--trend" aria-labelledby="trend-title">
             <div class="section-heading">
               <div>
@@ -165,6 +168,7 @@
               <div id="mix-summary" class="mix-summary"></div>
             </div>
           </section>
+          </div>
 
           <section id="illumin-section" class="report-card platform-section platform-section--illumin" hidden>
             <div class="section-heading section-heading--platform">
@@ -250,6 +254,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
     <script src="config.js"></script>
-    <script src="app.js?v=4"></script>
+    <script src="app.js?v=5"></script>
   </body>
 </html>
