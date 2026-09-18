@@ -1168,45 +1168,6 @@ tbody tr:hover {
     break-inside: avoid;
   }
 
-  #illumin-video {
-  margin-top: 0.08in;
-  padding-top: 0.06in;
-}
-
-#illumin-video .section-heading {
-  margin-bottom: 0.045in;
-}
-
-#illumin-video .section-heading h4 {
-  font-size: 10px;
-}
-
-#illumin-video .section-heading p {
-  margin-top: 0.02in;
-  font-size: 6.5px;
-}
-
-#illumin-video .video-steps {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.045in;
-}
-
-#illumin-video .video-step {
-  min-height: 0;
-  padding: 0.045in 0.05in;
-  gap: 0.015in;
-}
-
-#illumin-video .video-step span,
-#illumin-video .video-step small {
-  font-size: 6px;
-  line-height: 1.15;
-}
-
-#illumin-video .video-step strong {
-  font-size: 11px;
-  line-height: 1;
-}
 
  #platform-mix-section {
   break-inside: avoid;
