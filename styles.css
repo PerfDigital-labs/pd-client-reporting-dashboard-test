@@ -1218,35 +1218,57 @@ tbody tr:hover {
     line-height: 1.25;
   }
 
-  .report-card--trend {
-    break-inside: avoid;
-  }
+.report-card--trend {
+  break-inside: avoid;
+  margin-bottom: 0.06in;
+  padding: 0.085in 0.1in;
+}
 
-  .report-card--trend .chart-wrap--trend {
-    height: 2.35in !important;
-    min-height: 2.35in !important;
-    max-height: 2.35in !important;
-    overflow: hidden;
-  }
+.report-card--trend .section-heading {
+  margin-bottom: 0.045in;
+}
+
+.report-card--trend .chart-wrap--trend {
+  height: 1.8in !important;
+  min-height: 1.8in !important;
+  max-height: 1.8in !important;
+  overflow: hidden;
+}
 
   #platform-mix-section {
-    break-inside: avoid;
-  }
+  break-inside: avoid;
+  margin-bottom: 0.06in;
+  padding: 0.085in 0.1in;
+}
 
-  #platform-mix-section .mix-layout {
-    grid-template-columns: 2.05in minmax(0, 1fr);
-    gap: 0.22in;
-  }
+#platform-mix-section .section-heading {
+  margin-bottom: 0.04in;
+}
 
-  #platform-mix-section .chart-wrap--mix {
-    width: 1.85in;
-    height: 1.85in !important;
-    min-height: 1.85in;
-  }
+#platform-mix-section .mix-layout {
+  grid-template-columns: 1.55in minmax(0, 1fr);
+  gap: 0.14in;
+  align-items: center;
+}
 
-  #platform-mix-section .mix-summary {
-    gap: 0.14in;
-  }
+#platform-mix-section .chart-wrap--mix {
+  width: 1.4in;
+  height: 1.4in !important;
+  min-height: 1.4in !important;
+  max-height: 1.4in !important;
+}
+
+#platform-mix-section .mix-summary {
+  gap: 0.08in;
+}
+
+#platform-mix-section .mix-row {
+  gap: 0.025in;
+}
+
+#platform-mix-section .mix-row__track {
+  height: 5px;
+}
 
   .chart-wrap canvas {
     width: 100% !important;
