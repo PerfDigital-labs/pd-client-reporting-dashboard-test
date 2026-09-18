@@ -92,6 +92,27 @@
           <p>The dashboard will request the latest available reporting data from BigQuery through n8n.</p>
         </div>
       </section>
+      
+      <section id="loading-panel" 
+        class="loading-panel"
+    hidden
+    aria-live="polite"
+    aria-busy="true"
+>
+    <div class="loading-panel__spinner" aria-hidden="true">
+    <span></span>
+    </div>
+
+    <div class="loading-panel__content">
+    <p class="section-kicker">Preparing report</p>
+    <h2>Report dashboard loading…</h2>
+    <p>Pulling campaign, ad, and creative reporting data.</p>
+
+    <div class="loading-panel__bar" aria-hidden="true">    
+      <span></span>
+    </div>
+  </div>
+</section>
 
       <section id="report" class="report" hidden aria-busy="false">
         <div class="print-report-header" aria-hidden="true">
