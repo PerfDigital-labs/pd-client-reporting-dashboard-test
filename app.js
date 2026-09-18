@@ -23,6 +23,7 @@ const dom = {
   platformFilter: document.querySelector("#platform-filter"),
   platformButtons: [...document.querySelectorAll("[data-platform]")],
   welcomePanel: document.querySelector("#welcome-panel"),
+  loadingPanel: document.querySelector("#loading-panel"),
   report: document.querySelector("#report"),
   reportData: document.querySelector("#report-data"),
   noDataPanel: document.querySelector("#no-data-panel"),
@@ -80,6 +81,15 @@ const shortDateFormatter = new Intl.DateTimeFormat("en-US", {
 function setStatus(message, type = "default") {
   dom.appStatus.textContent = message;
   dom.appStatus.dataset.type = type;
+}
+function showReportLoading() {
+  dom.welcomePanel.hidden = true;
+  dom.loadingPanel.hidden = false;
+  dom.report.hidden = true;
+}
+
+function hideReportLoading() {
+  dom.loadingPanel.hidden = true;
 }
 
 function toNumber(value) {
@@ -247,6 +257,7 @@ function resetReport() {
   state.selectedPlatform = "all";
 
   dom.report.hidden = true;
+  dom.loadingPanel.hidden = true;
   dom.welcomePanel.hidden = false;
   dom.platformFilter.hidden = true;
   dom.printButton.disabled = true;
@@ -432,14 +443,15 @@ async function loadReport(clientId) {
   const requestedClientId = clientId;
 
   dom.clientSelect.disabled = true;
-  dom.report.setAttribute(
-    "aria-busy",
-    "true"
-  );
-  dom.report.hidden = true;
-  dom.welcomePanel.hidden = false;
-  dom.printButton.disabled = true;
 
+  dom.report.setAttribute(
+  "aria-busy",
+  "true"
+);
+
+showReportLoading();
+
+dom.printButton.disabled = true;
   setReportControlsEnabled(false);
 
   setStatus(
@@ -568,10 +580,12 @@ async function loadReport(clientId) {
 
     initializeReportState();
 
-    dom.welcomePanel.hidden = true;
-    dom.report.hidden = false;
+hideReportLoading();
 
-    renderReport();
+dom.welcomePanel.hidden = true;
+dom.report.hidden = false;
+
+renderReport();
 
     // Temporary testing.
     // We can remove these after confirming
@@ -596,8 +610,10 @@ async function loadReport(clientId) {
     state.reportData = null;
     state.adReportData = null;
 
-    dom.report.hidden = true;
-    dom.welcomePanel.hidden = false;
+   hideReportLoading();
+
+  dom.report.hidden = true;
+  dom.welcomePanel.hidden = false;
 
     setStatus(
       "The campaign report could not be loaded. Choose the client again to retry.",
