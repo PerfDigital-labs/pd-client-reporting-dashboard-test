@@ -1235,39 +1235,48 @@ tbody tr:hover {
   overflow: hidden;
 }
 
-  #platform-mix-section {
+ #platform-mix-section {
   break-inside: avoid;
-  margin-bottom: 0.06in;
-  padding: 0.085in 0.1in;
+  margin-bottom: 0.04in;
+  padding: 0.06in 0.08in;
 }
 
 #platform-mix-section .section-heading {
-  margin-bottom: 0.04in;
+  margin-bottom: 0.025in;
 }
 
 #platform-mix-section .mix-layout {
-  grid-template-columns: 1.55in minmax(0, 1fr);
-  gap: 0.14in;
+  grid-template-columns: 1.15in minmax(0, 1fr);
+  gap: 0.1in;
   align-items: center;
 }
 
 #platform-mix-section .chart-wrap--mix {
-  width: 1.4in;
-  height: 1.4in !important;
-  min-height: 1.4in !important;
-  max-height: 1.4in !important;
+  width: 1in;
+  height: 1in !important;
+  min-height: 1in !important;
+  max-height: 1in !important;
+  margin-inline: auto;
 }
 
 #platform-mix-section .mix-summary {
-  gap: 0.08in;
+  gap: 0.055in;
 }
 
 #platform-mix-section .mix-row {
-  gap: 0.025in;
+  gap: 0.02in;
+}
+
+#platform-mix-section .mix-row__header {
+  font-size: 7px;
+}
+
+#platform-mix-section .mix-row__header strong {
+  font-size: 6.5px;
 }
 
 #platform-mix-section .mix-row__track {
-  height: 5px;
+  height: 4px;
 }
 
   .chart-wrap canvas {
