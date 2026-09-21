@@ -2752,62 +2752,58 @@ function renderMetaAdSection() {
 }
 
 function renderIlluminCreativeSection() {
-  const rows = filteredIlluminCreativeRows();
+  const rows =
+    filteredIlluminCreativeRows();
 
   const showSection =
-    activePlatforms().includes("illumin") &&
+    activePlatforms().includes(
+      "illumin"
+    ) &&
     rows.length > 0;
 
-  dom.illuminCreativeSection.hidden = !showSection;
+  dom.illuminCreativeSection.hidden =
+    !showSection;
 
   if (!showSection) {
+    dom.illuminTacticGroups.replaceChildren();
     return;
   }
 
-  const creatives = aggregateIlluminCreatives(rows);
-  const displayedCreatives = creatives.slice(0, 10);
+  const creatives =
+    aggregateIlluminCreatives(rows);
 
-  const views = sumField(rows, "views");
-  const clicks = sumField(rows, "clicks");
-  const conversions = sumField(rows, "conversions");
+  const tacticGroups =
+    groupProgrammaticCreatives(
+      creatives
+    );
+
+  const views =
+    sumField(rows, "views");
+
+  const clicks =
+    sumField(rows, "clicks");
+
+  const conversions =
+    sumField(
+      rows,
+      "conversions"
+    );
 
   dom.illuminCreativeSummary.textContent =
     `${formatNumber(creatives.length)} creatives · ` +
+    `${formatNumber(tacticGroups.length)} tactics · ` +
     `${formatNumber(views)} views · ` +
     `${formatNumber(clicks)} clicks · ` +
-    `${formatNumber(conversions)} conversions · ` +
-    `showing top ${formatNumber(displayedCreatives.length)} by views`;
+    `${formatNumber(conversions)} conversions`;
 
-  const tableRows = displayedCreatives.map((creative) => {
-    const row = document.createElement("tr");
-
-    appendEntityNameCell(
-      row,
-      creative.name,
-      creative.id,
-      [creative.creative_type, creative.journey_name]
-        .filter(Boolean)
-        .join(" · ")
+  const tacticCards =
+    tacticGroups.map(
+      createProgrammaticTacticGroup
     );
 
-    appendValueCell(row, formatNumber(creative.views));
-    appendValueCell(row, formatNumber(creative.clicks));
-
-    appendValueCell(
-      row,
-      formatPercent(
-        safeDivide(creative.clicks, creative.views),
-        3
-      )
-    );
-
-    appendValueCell(row, formatNumber(creative.conversions));
-    appendValueCell(row, formatNumber(creative.video_complete));
-
-    return row;
-  });
-
-  dom.illuminCreativeBody.replaceChildren(...tableRows);
+  dom.illuminTacticGroups.replaceChildren(
+    ...tacticCards
+  );
 }
 function updatePrintHeader() {
   if (!state.reportData) {
