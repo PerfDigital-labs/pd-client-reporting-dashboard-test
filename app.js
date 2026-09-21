@@ -176,7 +176,7 @@ function platformIsAvailable(platform) {
 }
 
 function availablePlatforms() {
-  return ["illumin", "meta"].filter(platformIsAvailable);
+  return ["Programmatic", "meta"].filter(platformIsAvailable);
 }
 
 function activePlatforms() {
@@ -798,7 +798,7 @@ function renderPlatformBadges() {
 
     badge.textContent =
       platform === "illumin"
-        ? "Illumin"
+        ? "Programmatic"
         : "Meta";
 
     if (
@@ -826,7 +826,7 @@ function renderFreshness() {
     "illumin"
   ) {
     dom.reportFreshness.textContent =
-      `Illumin updated ${formatDate(
+      `Programmatic updated ${formatDate(
         freshness.illumin_latest_date
       )}`;
 
@@ -851,7 +851,7 @@ function renderFreshness() {
     platformIsAvailable("illumin")
   ) {
     freshnessParts.push(
-      `Illumin ${formatDate(
+      `Programmatic ${formatDate(
         freshness.illumin_latest_date
       )}`
     );
@@ -982,8 +982,8 @@ function renderKpis() {
 
     cards.push(
       createKpiCard(
-        "illumin",
-        "Illumin impressions",
+        "Programmatic",
+        "Programmatic impressions",
         formatCompact(
           impressions
         ),
@@ -994,8 +994,8 @@ function renderKpis() {
       ),
 
       createKpiCard(
-        "illumin",
-        "Illumin clicks",
+        "Programmatic",
+        "Programmatic clicks",
         formatCompact(clicks),
         `CTR ${formatPercent(
           safeDivide(
@@ -1008,8 +1008,8 @@ function renderKpis() {
       ),
 
       createKpiCard(
-        "illumin",
-        "Illumin conversions",
+        "Programmatic",
+        "Programmatic conversions",
         formatCompact(
           conversions
         ),
@@ -1176,7 +1176,7 @@ function renderHighlights() {
         createHighlightCard(
           "illumin",
           cards.length + 1,
-          `${topCampaign.name} led Illumin delivery`,
+          `${topCampaign.name} led Programmatic delivery`,
           `${formatNumber(
             topCampaign.impressions
           )} impressions · ${formatPercent(
@@ -1185,7 +1185,7 @@ function renderHighlights() {
               totalImpressions
             ),
             1
-          )} of Illumin impressions`
+          )} of Programmatic impressions`
         )
       );
     }
@@ -1266,7 +1266,7 @@ function renderHighlights() {
       illuminImpressions >=
       metaImpressions
         ? {
-            name: "Illumin",
+            name: "Programmatic",
             value:
               illuminImpressions
           }
@@ -1465,7 +1465,7 @@ function renderTrendChart() {
     datasets.push(
       {
         label:
-          "Illumin impressions",
+          "Programmatic impressions",
 
         data: labels.map(
           (date) =>
@@ -1489,7 +1489,7 @@ function renderTrendChart() {
 
       {
         label:
-          "Illumin clicks",
+          "Programmatic clicks",
 
         data: labels.map(
           (date) =>
@@ -1764,7 +1764,7 @@ function renderPlatformMix() {
         data: {
           labels: [
             "Meta",
-            "Illumin"
+            "Programmatic"
           ],
 
           datasets: [
@@ -1826,7 +1826,7 @@ function renderPlatformMix() {
     ),
 
     createMixRow(
-      "Illumin",
+      "Programmatic",
       illuminImpressions,
       illuminImpressions /
         total,
@@ -2054,7 +2054,7 @@ function renderIlluminSection() {
       impressions
     )} impressions · ${formatNumber(
       conversions
-    )} Illumin conversions`;
+    )} Programmatic conversions`;
 
   const tableRows =
     campaigns.map(
@@ -2557,7 +2557,7 @@ function updatePrintHeader() {
         (platform) =>
           platform ===
           "illumin"
-            ? "Illumin"
+            ? "Programmatic"
             : "Meta"
       )
       .join(" + ");
