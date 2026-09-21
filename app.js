@@ -176,7 +176,7 @@ function platformIsAvailable(platform) {
 }
 
 function availablePlatforms() {
-  return ["Programmatic", "meta"].filter(platformIsAvailable);
+  return ["illumin", "meta"].filter(platformIsAvailable);
 }
 
 function activePlatforms() {
@@ -982,7 +982,7 @@ function renderKpis() {
 
     cards.push(
       createKpiCard(
-        "Programmatic",
+        "illumin",
         "Programmatic impressions",
         formatCompact(
           impressions
@@ -994,7 +994,7 @@ function renderKpis() {
       ),
 
       createKpiCard(
-        "Programmatic",
+        "illumin",
         "Programmatic clicks",
         formatCompact(clicks),
         `CTR ${formatPercent(
@@ -1008,7 +1008,7 @@ function renderKpis() {
       ),
 
       createKpiCard(
-        "Programmatic",
+        "illumin",
         "Programmatic conversions",
         formatCompact(
           conversions
