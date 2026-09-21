@@ -677,6 +677,7 @@ function applyPreset(preset) {
     state.dateBounds.min;
 
   if (
+    preset === "7" ||
     preset === "30" ||
     preset === "90"
   ) {
@@ -693,6 +694,28 @@ function applyPreset(preset) {
 
     startDate =
       toIsoDate(calculatedStart);
+
+    if (
+      startDate <
+      state.dateBounds.min
+    ) {
+      startDate =
+        state.dateBounds.min;
+    }
+  }
+
+  if (preset === "month") {
+    const monthStart =
+      new Date(
+        Date.UTC(
+          maximumDate.getUTCFullYear(),
+          maximumDate.getUTCMonth(),
+          1
+        )
+      );
+
+    startDate =
+      toIsoDate(monthStart);
 
     if (
       startDate <
