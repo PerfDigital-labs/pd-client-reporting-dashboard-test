@@ -1055,29 +1055,70 @@ tbody tr:hover {
 
 .video-steps {
   display: grid;
-  grid-template-columns: repeat(5, minmax(115px, 1fr));
-  gap: 0.55rem;
+  gap: 0.9rem;
 }
 
 .video-step {
   display: grid;
-  gap: 0.14rem;
-  padding: 0.78rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  gap: 0.45rem;
+}
+
+.video-step__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.video-step__label {
+  color: var(--navy-deep);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.video-step__metrics {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.video-step__metrics strong {
+  color: var(--navy-deep);
+  font-family: Fraunces, Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+}
+
+.video-step__metrics small {
+  min-width: 3.5rem;
+  color: var(--slate);
+  font-size: 0.68rem;
+  text-align: right;
+}
+
+.video-step__track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
   background: var(--surface-soft);
 }
 
-.video-step span,
-.video-step small {
-  color: var(--slate);
-  font-size: 0.68rem;
+.video-step__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--illumin);
 }
 
-.video-step strong {
-  color: var(--navy-deep);
-  font-family: Fraunces, Georgia, "Times New Roman", serif;
-  font-size: 1.22rem;
+@media (max-width: 700px) {
+  .video-step__header {
+    align-items: flex-start;
+  }
+
+  .video-step__metrics {
+    gap: 0.35rem;
+  }
 }
 
 .section-note {
