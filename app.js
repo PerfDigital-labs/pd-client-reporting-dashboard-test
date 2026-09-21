@@ -2139,102 +2139,169 @@ function renderIlluminSection() {
   dom.illuminVideo.hidden =
     videoStarts === 0;
 
-  if (videoStarts > 0) {
-    const videoMetrics = [
-      [
-        "Starts",
-        "video_start"
-      ],
-      [
-        "25% viewed",
-        "video_first_quartile"
-      ],
-      [
-        "50% viewed",
-        "video_midpoint"
-      ],
-      [
-        "75% viewed",
-        "video_third_quartile"
-      ],
-      [
-        "Completed",
-        "video_complete"
-      ]
-    ];
+if (videoStarts > 0) {
+  const videoMetrics = [
+    [
+      "Starts",
+      "video_start"
+    ],
+    [
+      "25% viewed",
+      "video_first_quartile"
+    ],
+    [
+      "50% viewed",
+      "video_midpoint"
+    ],
+    [
+      "75% viewed",
+      "video_third_quartile"
+    ],
+    [
+      "Completed",
+      "video_complete"
+    ]
+  ];
 
-    const steps =
-      videoMetrics.map(
-        (
-          [
-            label,
+  const steps =
+    videoMetrics.map(
+      (
+        [
+          label,
+          field
+        ],
+        index
+      ) => {
+        const value =
+          sumField(
+            rows,
             field
-          ],
-          index
-        ) => {
-          const value =
-            sumField(
-              rows,
-              field
-            );
-
-          const step =
-            document.createElement(
-              "article"
-            );
-
-          step.className =
-            "video-step";
-
-          const labelElement =
-            document.createElement(
-              "span"
-            );
-
-          labelElement.textContent =
-            label;
-
-          const valueElement =
-            document.createElement(
-              "strong"
-            );
-
-          valueElement.textContent =
-            formatNumber(
-              value
-            );
-
-          const rateElement =
-            document.createElement(
-              "small"
-            );
-
-          rateElement.textContent =
-            index === 0
-              ? "100.0%"
-              : formatPercent(
-                  safeDivide(
-                    value,
-                    videoStarts
-                  ),
-                  1
-                );
-
-          step.append(
-            labelElement,
-            valueElement,
-            rateElement
           );
 
-          return step;
-        }
-      );
+        const ratio =
+          index === 0
+            ? 1
+            : safeDivide(
+                value,
+                videoStarts
+              );
 
-    dom.videoSteps.replaceChildren(
-      ...steps
+        const percentage =
+          Math.min(
+            Math.max(
+              ratio * 100,
+              0
+            ),
+            100
+          );
+
+        const step =
+          document.createElement(
+            "article"
+          );
+
+        step.className =
+          "video-step";
+
+        const header =
+          document.createElement(
+            "div"
+          );
+
+        header.className =
+          "video-step__header";
+
+        const labelElement =
+          document.createElement(
+            "span"
+          );
+
+        labelElement.className =
+          "video-step__label";
+
+        labelElement.textContent =
+          label;
+
+        const metrics =
+          document.createElement(
+            "div"
+          );
+
+        metrics.className =
+          "video-step__metrics";
+
+        const valueElement =
+          document.createElement(
+            "strong"
+          );
+
+        valueElement.textContent =
+          formatNumber(
+            value
+          );
+
+        const rateElement =
+          document.createElement(
+            "small"
+          );
+
+        rateElement.textContent =
+          index === 0
+            ? "100.0%"
+            : formatPercent(
+                ratio,
+                1
+              );
+
+        metrics.append(
+          valueElement,
+          rateElement
+        );
+
+        header.append(
+          labelElement,
+          metrics
+        );
+
+        const track =
+          document.createElement(
+            "div"
+          );
+
+        track.className =
+          "video-step__track";
+
+        track.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+
+        const fill =
+          document.createElement(
+            "span"
+          );
+
+        fill.className =
+          "video-step__fill";
+
+        fill.style.width =
+          `${percentage}%`;
+
+        track.append(fill);
+
+        step.append(
+          header,
+          track
+        );
+
+        return step;
+      }
     );
-  }
 
+  dom.videoSteps.replaceChildren(
+    ...steps
+  );
+}
   if (
     clicks === 0 &&
     impressions > 0
