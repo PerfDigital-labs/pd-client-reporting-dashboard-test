@@ -982,7 +982,71 @@ tbody tr:hover {
   color: var(--slate);
   font-size: 0.64rem;
 }
+.tactic-groups {
+  display: grid;
+  gap: 1rem;
+}
 
+.tactic-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--illumin);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.tactic-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--illumin-soft);
+}
+
+.tactic-card__label {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  color: var(--illumin-dark);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tactic-card__summary {
+  margin: 0.28rem 0 0;
+  color: var(--slate);
+  font-size: 0.76rem;
+}
+
+.tactic-card__showing {
+  flex-shrink: 0;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--slate);
+  background: var(--surface);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.tactic-card__table {
+  border: 0;
+  border-radius: 0;
+}
+
+.tactic-card__table table {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .tactic-card__header {
+    flex-direction: column;
+  }
+}
 .video-panel {
   margin-top: 1.25rem;
   padding-top: 1.15rem;
