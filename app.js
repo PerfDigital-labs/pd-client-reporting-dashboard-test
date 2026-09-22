@@ -3659,7 +3659,10 @@ function printReport() {
   window.print();
 }
 
-function resizeReportCharts() {
+function resizeReportCharts(
+  devicePixelRatio =
+    window.devicePixelRatio || 1
+) {
   [
     state.trendChart,
     state.mixChart,
@@ -3668,7 +3671,17 @@ function resizeReportCharts() {
     state.metaAgeChart,
     state.metaGenderChart
   ].forEach(
-    (chart) => chart?.resize()
+    (chart) => {
+      if (!chart) {
+        return;
+      }
+
+      chart.options.devicePixelRatio =
+        devicePixelRatio;
+
+      chart.resize();
+      chart.update("none");
+    }
   );
 }
 
@@ -3833,7 +3846,7 @@ window.addEventListener(
   () => {
     updatePrintHeader();
 
-    resizeReportCharts();
+    resizeReportCharts(4);
   }
 );
 
