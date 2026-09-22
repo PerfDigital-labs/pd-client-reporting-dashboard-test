@@ -3357,6 +3357,12 @@ function renderAudiencePieChart(
   );
 }
 function renderMetaAudienceSection() {
+  state.metaAgeChart?.destroy();
+  state.metaGenderChart?.destroy();
+
+  state.metaAgeChart = null;
+  state.metaGenderChart = null;
+  
   const ageRows =
     filteredAudienceRows(
       "meta",
@@ -3403,7 +3409,21 @@ function renderMetaAudienceSection() {
         "inline_link_clicks"
       )
     );
+  state.metaAgeChart =
+    renderAudiencePieChart(
+      dom.metaAgeCanvas,
+      ages,
+      "meta",
+      "website clicks"
+    );
 
+  state.metaGenderChart =
+    renderAudiencePieChart(
+      dom.metaGenderCanvas,
+      genders,
+      "meta",
+      "website clicks"
+    );
   dom.metaAgeBreakdown.replaceChildren(
     ...createAudienceRows(
       ages,
