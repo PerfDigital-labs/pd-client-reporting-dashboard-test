@@ -580,8 +580,9 @@ dom.printButton.disabled = true;
 
           return null;
         });
-    }
-      const [
+  }
+
+    const [
       campaignData,
       adData,
       audienceData
@@ -667,7 +668,8 @@ renderReport();
       "Ad / creative report loaded:",
       state.adReportData
     );
-        console.log(
+
+    console.log(
       "Audience report loaded:",
       state.audienceReportData
     );
