@@ -581,7 +581,7 @@ dom.printButton.disabled = true;
           return null;
         });
     }
-        const [
+      const [
       campaignData,
       adData,
       audienceData
@@ -629,7 +629,23 @@ dom.printButton.disabled = true;
         );
       }
     }
+    if (
+      audienceData &&
+      validateAudienceReportPayload(
+        audienceData,
+        requestedClientId
+      )
+    ) {
+      state.audienceReportData = audienceData;
+    } else {
+      state.audienceReportData = null;
 
+      if (audienceData) {
+        console.warn(
+          "The audience response did not match the selected client."
+        );
+      }
+    }
     initializeReportState();
 
 hideReportLoading();
