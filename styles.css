@@ -1621,7 +1621,79 @@ tbody tr:hover {
   .campaign-id {
     font-size: 6px;
   }
+  #illumin-audience-section,
+  #meta-audience-section {
+    break-inside: avoid;
+  }
 
+  #illumin-audience-section .audience-grid,
+  #meta-audience-section .audience-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.08in;
+  }
+
+  #illumin-audience-section .audience-card,
+  #meta-audience-section .audience-card {
+    padding: 0.08in;
+    break-inside: avoid;
+  }
+
+  #illumin-audience-section .audience-card__header,
+  #meta-audience-section .audience-card__header {
+    margin-bottom: 0.04in;
+  }
+
+  #illumin-audience-section .audience-card__header h4,
+  #meta-audience-section .audience-card__header h4 {
+    font-size: 8px;
+  }
+
+  #illumin-audience-section .audience-card__header p,
+  #meta-audience-section .audience-card__header p {
+    font-size: 6.5px;
+  }
+
+  #illumin-audience-section .audience-pie,
+  #meta-audience-section .audience-pie {
+    width: 1.45in;
+    height: 1.45in;
+    margin: 0 auto 0.05in;
+  }
+
+  #illumin-audience-section .audience-breakdown,
+  #meta-audience-section .audience-breakdown {
+    gap: 0.035in;
+  }
+
+  #illumin-audience-section .audience-row,
+  #meta-audience-section .audience-row {
+    gap: 0.015in;
+  }
+
+  #illumin-audience-section .audience-row__label,
+  #meta-audience-section .audience-row__label {
+    font-size: 6.5px;
+  }
+
+  #illumin-audience-section .audience-row__metrics > strong,
+  #meta-audience-section .audience-row__metrics > strong {
+    font-size: 7px;
+  }
+
+  #illumin-audience-section .audience-row__metrics small,
+  #meta-audience-section .audience-row__metrics small {
+    font-size: 5.5px;
+  }
+
+  #illumin-audience-section .audience-row__track,
+  #meta-audience-section .audience-row__track {
+    height: 4px;
+  }
+
+  #meta-audience-scope-note {
+    margin-top: 0.04in;
+    font-size: 6px;
+  }
   .methodology-card {
     color: #ffffff;
   }
