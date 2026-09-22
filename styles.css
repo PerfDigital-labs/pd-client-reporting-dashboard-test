@@ -1558,6 +1558,10 @@ tbody tr:hover {
     gap: 0.06in;
   }
 
+  .highlights-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .kpi-card {
     padding: 0.08in;
   }
@@ -1574,7 +1578,7 @@ tbody tr:hover {
   }
 
   .chart-wrap--trend {
-    height: 2.75in;
+    height: 2.5in;
   }
 
   #platform-mix-section {
