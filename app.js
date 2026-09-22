@@ -5,6 +5,7 @@ const state = {
   selectedClientId: null,
   reportData: null,
   adReportData: null,
+  audienceReportData: null,
   startDate: null,
   endDate: null,
   dateBounds: { min: null, max: null },
@@ -251,6 +252,7 @@ function resetReport() {
 
   state.reportData = null;
   state.adReportData = null;
+  state.audienceReportData = null;
   state.startDate = null;
   state.endDate = null;
   state.dateBounds = { min: null, max: null };
@@ -382,7 +384,18 @@ function validateAdReportPayload(
     typeof data.platforms === "object"
   );
 }
-
+function validateAudienceReportPayload(
+  data,
+  requestedClientId
+) {
+  return (
+    data &&
+    data.client?.client_id === requestedClientId &&
+    typeof data.client?.client_name === "string" &&
+    data.platforms &&
+    typeof data.platforms === "object"
+  );
+}
 function initializeReportState() {
   const dates = [];
 
@@ -529,15 +542,54 @@ dom.printButton.disabled = true;
           return null;
         });
     }
+    // Audience report
+    let audienceRequest = Promise.resolve(null);
 
-    const [
+    if (window.REPORT_CONFIG?.audienceApiUrl) {
+      const audienceUrl = new URL(
+        window.REPORT_CONFIG.audienceApiUrl
+      );
+
+      audienceUrl.searchParams.set(
+        "client_id",
+        requestedClientId
+      );
+
+      audienceRequest = fetch(
+        audienceUrl,
+        {
+          headers: {
+            Accept: "application/json"
+          }
+        }
+      )
+        .then(async (response) => {
+          if (!response.ok) {
+            throw new Error(
+              `Audience report request failed with status ${response.status}.`
+            );
+          }
+
+          return response.json();
+        })
+        .catch((error) => {
+          console.error(
+            "Unable to load the audience report.",
+            error
+          );
+
+          return null;
+        });
+    }
+        const [
       campaignData,
-      adData
+      adData,
+      audienceData
     ] = await Promise.all([
       campaignRequest,
-      adRequest
+      adRequest,
+      audienceRequest
     ]);
-
     if (
       !validateReportPayload(
         campaignData,
