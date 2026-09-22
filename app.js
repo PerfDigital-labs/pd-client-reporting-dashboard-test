@@ -3193,6 +3193,90 @@ function createAudienceRows(
     }
   );
 }
+function renderMetaAudienceSection() {
+  const ageRows =
+    filteredAudienceRows(
+      "meta",
+      "age_daily"
+    );
+
+  const genderRows =
+    filteredAudienceRows(
+      "meta",
+      "gender_daily"
+    );
+
+  const showSection =
+    activePlatforms().includes("meta") &&
+    (
+      ageRows.length > 0 ||
+      genderRows.length > 0
+    );
+
+  dom.metaAudienceSection.hidden =
+    !showSection;
+
+  if (!showSection) {
+    dom.metaAgeBreakdown.replaceChildren();
+    dom.metaGenderBreakdown.replaceChildren();
+    dom.metaAudienceScopeNote.hidden = true;
+    return;
+  }
+
+  const ages =
+    sortMetaAgeCategories(
+      aggregateAudienceCategory(
+        ageRows,
+        "age",
+        "inline_link_clicks"
+      )
+    );
+
+  const genders =
+    sortGenderCategories(
+      aggregateAudienceCategory(
+        genderRows,
+        "gender",
+        "inline_link_clicks"
+      )
+    );
+
+  dom.metaAgeBreakdown.replaceChildren(
+    ...createAudienceRows(
+      ages,
+      "meta",
+      "website clicks"
+    )
+  );
+
+  dom.metaGenderBreakdown.replaceChildren(
+    ...createAudienceRows(
+      genders,
+      "meta",
+      "website clicks"
+    )
+  );
+
+  const scope =
+    state.audienceReportData
+      ?.platforms
+      ?.meta
+      ?.scope;
+
+  if (
+    scope?.is_shared &&
+    scope?.source_name
+  ) {
+    dom.metaAudienceScopeNote.textContent =
+      `Audience demographics reflect campaign-level Meta reporting for ${scope.source_name}.`;
+
+    dom.metaAudienceScopeNote.hidden =
+      false;
+  } else {
+    dom.metaAudienceScopeNote.hidden =
+      true;
+  }
+}
 function renderIlluminCreativeSection() {
   const rows =
     filteredIlluminCreativeRows();
