@@ -3362,7 +3362,6 @@ function renderMetaAudienceSection() {
 
   state.metaAgeChart = null;
   state.metaGenderChart = null;
-  
   const ageRows =
     filteredAudienceRows(
       "meta",
@@ -3424,6 +3423,7 @@ function renderMetaAudienceSection() {
       "meta",
       "website clicks"
     );
+  
   dom.metaAgeBreakdown.replaceChildren(
     ...createAudienceRows(
       ages,
