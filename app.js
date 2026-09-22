@@ -3277,6 +3277,73 @@ function renderMetaAudienceSection() {
       true;
   }
 }
+function renderIlluminAudienceSection() {
+  const ageRows =
+    filteredAudienceRows(
+      "illumin",
+      "age_daily"
+    );
+
+  const genderRows =
+    filteredAudienceRows(
+      "illumin",
+      "gender_daily"
+    );
+
+  const showSection =
+    activePlatforms().includes(
+      "illumin"
+    ) &&
+    (
+      ageRows.length > 0 ||
+      genderRows.length > 0
+    );
+
+  dom.illuminAudienceSection.hidden =
+    !showSection;
+
+  if (!showSection) {
+    dom.illuminAgeBreakdown.replaceChildren();
+    dom.illuminGenderBreakdown.replaceChildren();
+    return;
+  }
+
+  const ages =
+    sortProgrammaticAgeCategories(
+      aggregateAudienceCategory(
+        ageRows,
+        "age_range",
+        "views"
+      )
+    );
+
+  const genders =
+    sortGenderCategories(
+      aggregateAudienceCategory(
+        genderRows,
+        "gender",
+        "views"
+      )
+    );
+
+  dom.illuminAgeBreakdown.replaceChildren(
+    ...createAudienceRows(
+      ages,
+      "illumin",
+      "views",
+      true
+    )
+  );
+
+  dom.illuminGenderBreakdown.replaceChildren(
+    ...createAudienceRows(
+      genders,
+      "illumin",
+      "views",
+      true
+    )
+  );
+}
 function renderIlluminCreativeSection() {
   const rows =
     filteredIlluminCreativeRows();
