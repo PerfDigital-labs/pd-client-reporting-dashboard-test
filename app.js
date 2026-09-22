@@ -667,6 +667,10 @@ renderReport();
       "Ad / creative report loaded:",
       state.adReportData
     );
+        console.log(
+      "Audience report loaded:",
+      state.audienceReportData
+    );
   } catch (error) {
     console.error(
       "Unable to load the campaign report.",
@@ -677,6 +681,7 @@ renderReport();
 
     state.reportData = null;
     state.adReportData = null;
+    state.audienceReportData = null;
 
    hideReportLoading();
 
