@@ -56,7 +56,16 @@ const dom = {
 
   illuminCreativeSection: document.querySelector("#illumin-creative-section"),
   illuminCreativeSummary: document.querySelector("#illumin-creative-summary"),
-  illuminTacticGroups: document.querySelector("#illumin-tactic-groups")
+  illuminTacticGroups: document.querySelector("#illumin-tactic-groups"),
+
+  illuminAudienceSection: document.querySelector("#illumin-audience-section"),
+  illuminAgeBreakdown: document.querySelector("#illumin-age-breakdown"),
+  illuminGenderBreakdown: document.querySelector("#illumin-gender-breakdown"),
+
+  metaAudienceSection: document.querySelector("#meta-audience-section"),
+  metaAgeBreakdown: document.querySelector("#meta-age-breakdown"),
+  metaGenderBreakdown: document.querySelector("#meta-gender-breakdown"),
+  metaAudienceScopeNote: document.querySelector("#meta-audience-scope-note")
 };
 
 const numberFormatter = new Intl.NumberFormat("en-US");
@@ -227,6 +236,23 @@ function filteredIlluminCreativeRows() {
       typeof row.date === "string" &&
       row.date >= state.startDate &&
       row.date <= state.endDate
+  );
+}
+function filteredAudienceRows(
+  platform,
+  breakdown
+) {
+  const rows =
+    state.audienceReportData
+      ?.platforms
+      ?.[platform]
+      ?.[breakdown] ?? [];
+
+  return rows.filter(
+    (row) =>
+      typeof row.report_date === "string" &&
+      row.report_date >= state.startDate &&
+      row.report_date <= state.endDate
   );
 }
 
