@@ -272,7 +272,6 @@ function setReportControlsEnabled(enabled) {
     button.disabled = !enabled;
   }
 }
-
  function destroyCharts() {
   state.trendChart?.destroy();
   state.mixChart?.destroy();
