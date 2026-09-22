@@ -3102,9 +3102,13 @@ function createAudienceRows(
         sum + category.value,
       0
     );
-
+  const colors =
+    audienceColors(
+      platform,
+      categories.length
+    );
   return categories.map(
-    (category) => {
+    (category, index) => {
       const share =
         safeDivide(
           category.value,
@@ -3190,7 +3194,7 @@ function createAudienceRows(
       const fill =
         document.createElement("span");
 
-      fill.className =
+            fill.className =
         `audience-row__fill audience-row__fill--${platform}`;
 
       fill.style.width =
@@ -3199,6 +3203,8 @@ function createAudienceRows(
           100
         )}%`;
 
+      fill.style.backgroundColor =
+        colors[index];
       track.append(fill);
 
       row.append(
