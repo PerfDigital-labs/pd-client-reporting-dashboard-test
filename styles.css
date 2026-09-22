@@ -1419,7 +1419,7 @@ tbody tr:hover {
 @media print {
   @page {
     size: A4 portrait;
-    margin: 12mm;
+    margin: 11mm 12mm;
   }
 
   :root {
@@ -1438,6 +1438,7 @@ tbody tr:hover {
 
   body {
     font-size: 10px;
+    line-height: 1.35;
   }
 
   .dashboard-width {
@@ -1445,14 +1446,14 @@ tbody tr:hover {
     max-width: none;
   }
 
-.site-header,
-.filter-panel,
-.welcome-panel,
-.loading-panel,
-.app-status,
-.site-footer {
-  display: none !important;
-}
+  .site-header,
+  .filter-panel,
+  .welcome-panel,
+  .loading-panel,
+  .app-status,
+  .site-footer {
+    display: none !important;
+  }
 
   .dashboard-shell {
     padding: 0;
@@ -1507,11 +1508,14 @@ tbody tr:hover {
     padding: 0.11in;
     border-color: #ccd7dd;
     box-shadow: none;
+    break-inside: auto;
+    page-break-inside: auto;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   .print-overview-group {
     display: block;
-    break-inside: avoid;
   }
 
   .print-chart-group {
@@ -1519,13 +1523,18 @@ tbody tr:hover {
   }
 
   .report-summary,
+  .highlights-section,
+  .report-card--trend,
   .methodology-card {
-    break-inside: avoid;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   .report-heading,
   .section-heading {
     margin-bottom: 0.1in;
+    break-after: avoid-page;
+    page-break-after: avoid;
   }
 
   .report-heading h2 {
@@ -1540,53 +1549,78 @@ tbody tr:hover {
   .kpi-card,
   .highlight-card,
   .video-step {
-    break-inside: avoid;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
+  .kpi-grid,
+  .highlights-grid {
+    gap: 0.06in;
+  }
 
- #platform-mix-section {
-  break-inside: avoid;
-  margin-bottom: 0.04in;
-  padding: 0.06in 0.08in;
-}
+  .kpi-card {
+    padding: 0.08in;
+  }
 
-#platform-mix-section .section-heading {
-  margin-bottom: 0.025in;
-}
+  .highlight-card {
+    padding: 0.08in 0.08in 0.08in 0.34in;
+  }
 
-#platform-mix-section .mix-layout {
-  grid-template-columns: 1.15in minmax(0, 1fr);
-  gap: 0.1in;
-  align-items: center;
-}
+  .highlight-card__number {
+    top: 0.09in;
+    left: 0.08in;
+    width: 0.2in;
+    height: 0.2in;
+  }
 
-#platform-mix-section .chart-wrap--mix {
-  width: 1in;
-  height: 1in !important;
-  min-height: 1in !important;
-  max-height: 1in !important;
-  margin-inline: auto;
-}
+  .chart-wrap--trend {
+    height: 2.75in;
+  }
 
-#platform-mix-section .mix-summary {
-  gap: 0.055in;
-}
+  #platform-mix-section {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+    margin-bottom: 0.04in;
+    padding: 0.06in 0.08in;
+  }
 
-#platform-mix-section .mix-row {
-  gap: 0.02in;
-}
+  #platform-mix-section .section-heading {
+    margin-bottom: 0.025in;
+  }
 
-#platform-mix-section .mix-row__header {
-  font-size: 7px;
-}
+  #platform-mix-section .mix-layout {
+    grid-template-columns: 1.15in minmax(0, 1fr);
+    gap: 0.1in;
+    align-items: center;
+  }
 
-#platform-mix-section .mix-row__header strong {
-  font-size: 6.5px;
-}
+  #platform-mix-section .chart-wrap--mix {
+    width: 1in;
+    height: 1in !important;
+    min-height: 1in !important;
+    max-height: 1in !important;
+    margin-inline: auto;
+  }
 
-#platform-mix-section .mix-row__track {
-  height: 4px;
-}
+  #platform-mix-section .mix-summary {
+    gap: 0.055in;
+  }
+
+  #platform-mix-section .mix-row {
+    gap: 0.02in;
+  }
+
+  #platform-mix-section .mix-row__header {
+    font-size: 7px;
+  }
+
+  #platform-mix-section .mix-row__header strong {
+    font-size: 6.5px;
+  }
+
+  #platform-mix-section .mix-row__track {
+    height: 4px;
+  }
 
   .chart-wrap canvas {
     width: 100% !important;
@@ -1597,33 +1631,96 @@ tbody tr:hover {
 
   .table-scroll {
     overflow: visible;
+    border-radius: 5px;
   }
 
   table {
+    width: 100%;
     min-width: 0;
+    table-layout: auto;
     font-size: 7.5px;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
+  tr,
+  td,
+  th {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   th,
   td {
-    padding: 5px 6px;
+    padding: 4px 5px;
   }
 
   th {
     font-size: 6.5px;
+    line-height: 1.2;
+    white-space: normal;
   }
 
   th:first-child,
   td:first-child {
-    min-width: 1.75in;
+    width: 34%;
+    min-width: 1.45in;
   }
 
   .campaign-id {
     font-size: 6px;
   }
+
+  .platform-section,
+  .tactic-card {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .platform-section--illumin {
+    border-top-color: var(--illumin);
+  }
+
+  .platform-section--meta {
+    border-top-color: var(--meta);
+  }
+
+  .tactic-groups {
+    gap: 0.08in;
+  }
+
+  .tactic-card {
+    overflow: visible;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .tactic-card__header,
+  .audience-card__header,
+  .video-panel .section-heading {
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+
+  .tactic-card__header {
+    padding: 0.07in 0.08in;
+  }
+
+  .video-panel {
+    margin-top: 0.08in;
+    padding-top: 0.08in;
+  }
+
   #illumin-audience-section,
   #meta-audience-section {
-    break-inside: avoid;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   #illumin-audience-section .audience-grid,
@@ -1635,7 +1732,8 @@ tbody tr:hover {
   #illumin-audience-section .audience-card,
   #meta-audience-section .audience-card {
     padding: 0.08in;
-    break-inside: avoid;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   #illumin-audience-section .audience-card__header,
@@ -1694,11 +1792,19 @@ tbody tr:hover {
     margin-top: 0.04in;
     font-size: 6px;
   }
+
   .methodology-card {
     color: #ffffff;
   }
 
   .platform-section {
     break-before: auto;
+    page-break-before: auto;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
   }
 }
