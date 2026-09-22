@@ -3654,10 +3654,22 @@ function printReport() {
 
   updatePrintHeader();
 
-  state.trendChart?.resize();
-  state.mixChart?.resize();
+  resizeReportCharts();
 
   window.print();
+}
+
+function resizeReportCharts() {
+  [
+    state.trendChart,
+    state.mixChart,
+    state.illuminAgeChart,
+    state.illuminGenderChart,
+    state.metaAgeChart,
+    state.metaGenderChart
+  ].forEach(
+    (chart) => chart?.resize()
+  );
 }
 
 function renderReport() {
@@ -3821,16 +3833,14 @@ window.addEventListener(
   () => {
     updatePrintHeader();
 
-    state.trendChart?.resize();
-    state.mixChart?.resize();
+    resizeReportCharts();
   }
 );
 
 window.addEventListener(
   "afterprint",
   () => {
-    state.trendChart?.resize();
-    state.mixChart?.resize();
+    resizeReportCharts();
   }
 );
 
