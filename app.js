@@ -3536,7 +3536,9 @@ function renderReport() {
   renderIlluminSection();
   renderMetaSection();
   renderIlluminCreativeSection();
+  renderIlluminAudienceSection();
   renderMetaAdSection();
+  renderMetaAudienceSection();
 
   setStatus(
     `${state.reportData.client.client_name} · ${formatDateRange(
