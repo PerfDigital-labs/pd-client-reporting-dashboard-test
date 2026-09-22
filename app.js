@@ -2918,7 +2918,281 @@ function renderMetaAdSection() {
 
   dom.metaAdBody.replaceChildren(...tableRows);
 }
+function aggregateAudienceCategory(
+  rows,
+  categoryField,
+  metricField
+) {
+  const categories = new Map();
 
+  for (const row of rows) {
+    const rawLabel =
+      String(
+        row[categoryField] ?? "Unknown"
+      ).trim();
+
+    const label =
+      rawLabel || "Unknown";
+
+    if (!categories.has(label)) {
+      categories.set(label, {
+        label,
+        value: 0,
+        clicks: 0
+      });
+    }
+
+    const category =
+      categories.get(label);
+
+    category.value +=
+      toNumber(row[metricField]);
+
+    category.clicks +=
+      toNumber(row.clicks);
+  }
+
+  return [...categories.values()];
+}
+
+function normalizeGenderLabel(value) {
+  const normalized =
+    String(value ?? "")
+      .trim()
+      .toLowerCase();
+
+  if (normalized === "female") {
+    return "Female";
+  }
+
+  if (normalized === "male") {
+    return "Male";
+  }
+
+  if (normalized === "unknown") {
+    return "Unknown";
+  }
+
+  return value || "Unknown";
+}
+
+function sortMetaAgeCategories(categories) {
+  const order = [
+    "18-24",
+    "25-34",
+    "35-44",
+    "45-54",
+    "55-64",
+    "65+",
+    "Unknown"
+  ];
+
+  return categories.sort(
+    (first, second) => {
+      const firstIndex =
+        order.indexOf(first.label);
+
+      const secondIndex =
+        order.indexOf(second.label);
+
+      return (
+        (firstIndex === -1 ? 99 : firstIndex) -
+        (secondIndex === -1 ? 99 : secondIndex)
+      );
+    }
+  );
+}
+
+function sortProgrammaticAgeCategories(
+  categories
+) {
+  return categories.sort(
+    (first, second) => {
+      if (
+        first.label.toLowerCase() ===
+        "unknown"
+      ) {
+        return 1;
+      }
+
+      if (
+        second.label.toLowerCase() ===
+        "unknown"
+      ) {
+        return -1;
+      }
+
+      const firstAge =
+        Number.parseInt(
+          first.label,
+          10
+        );
+
+      const secondAge =
+        Number.parseInt(
+          second.label,
+          10
+        );
+
+      return (
+        (Number.isFinite(firstAge)
+          ? firstAge
+          : 999) -
+        (Number.isFinite(secondAge)
+          ? secondAge
+          : 999)
+      );
+    }
+  );
+}
+
+function sortGenderCategories(categories) {
+  const order = [
+    "female",
+    "male",
+    "unknown"
+  ];
+
+  return categories.sort(
+    (first, second) => {
+      const firstIndex =
+        order.indexOf(
+          first.label.toLowerCase()
+        );
+
+      const secondIndex =
+        order.indexOf(
+          second.label.toLowerCase()
+        );
+
+      return (
+        (firstIndex === -1 ? 99 : firstIndex) -
+        (secondIndex === -1 ? 99 : secondIndex)
+      );
+    }
+  );
+}
+
+function createAudienceRows(
+  categories,
+  platform,
+  metricLabel,
+  showClicks = false
+) {
+  const total =
+    categories.reduce(
+      (sum, category) =>
+        sum + category.value,
+      0
+    );
+
+  return categories.map(
+    (category) => {
+      const share =
+        safeDivide(
+          category.value,
+          total
+        ) ?? 0;
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "audience-row";
+
+      const header =
+        document.createElement("div");
+
+      header.className =
+        "audience-row__header";
+
+      const label =
+        document.createElement("strong");
+
+      label.className =
+        "audience-row__label";
+
+      label.textContent =
+        normalizeGenderLabel(
+          category.label
+        );
+
+      const metrics =
+        document.createElement("span");
+
+      metrics.className =
+        "audience-row__metrics";
+
+      const primary =
+        document.createElement("strong");
+
+      primary.textContent =
+        formatNumber(
+          category.value
+        );
+
+      const shareElement =
+        document.createElement("small");
+
+      shareElement.textContent =
+        `${formatPercent(
+          share,
+          1
+        )} of ${metricLabel}`;
+
+      metrics.append(
+        primary,
+        shareElement
+      );
+
+      if (showClicks) {
+        const clickElement =
+          document.createElement("small");
+
+        clickElement.textContent =
+          `${formatNumber(
+            category.clicks
+          )} clicks`;
+
+        metrics.append(
+          clickElement
+        );
+      }
+
+      header.append(
+        label,
+        metrics
+      );
+
+      const track =
+        document.createElement("div");
+
+      track.className =
+        "audience-row__track";
+
+      const fill =
+        document.createElement("span");
+
+      fill.className =
+        `audience-row__fill audience-row__fill--${platform}`;
+
+      fill.style.width =
+        `${Math.min(
+          share * 100,
+          100
+        )}%`;
+
+      track.append(fill);
+
+      row.append(
+        header,
+        track
+      );
+
+      return row;
+    }
+  );
+}
 function renderIlluminCreativeSection() {
   const rows =
     filteredIlluminCreativeRows();
