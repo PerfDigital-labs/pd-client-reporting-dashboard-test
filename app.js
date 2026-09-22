@@ -3194,7 +3194,7 @@ function createAudienceRows(
       const fill =
         document.createElement("span");
 
-            fill.className =
+      fill.className =
         `audience-row__fill audience-row__fill--${platform}`;
 
       fill.style.width =
