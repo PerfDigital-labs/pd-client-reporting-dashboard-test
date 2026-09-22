@@ -11,7 +11,11 @@ const state = {
   dateBounds: { min: null, max: null },
   selectedPlatform: "all",
   trendChart: null,
-  mixChart: null
+  mixChart: null,
+  illuminAgeChart: null,
+  illuminGenderChart: null,
+  metaAgeChart: null,
+  metaGenderChart: null
 };
 
 const dom = {
@@ -59,10 +63,14 @@ const dom = {
   illuminTacticGroups: document.querySelector("#illumin-tactic-groups"),
 
   illuminAudienceSection: document.querySelector("#illumin-audience-section"),
+  illuminAgeCanvas: document.querySelector("#illumin-age-chart"),
+  illuminGenderCanvas: document.querySelector("#illumin-gender-chart"),
   illuminAgeBreakdown: document.querySelector("#illumin-age-breakdown"),
   illuminGenderBreakdown: document.querySelector("#illumin-gender-breakdown"),
 
   metaAudienceSection: document.querySelector("#meta-audience-section"),
+  metaAgeCanvas: document.querySelector("#meta-age-chart"),
+  metaGenderCanvas: document.querySelector("#meta-gender-chart"),
   metaAgeBreakdown: document.querySelector("#meta-age-breakdown"),
   metaGenderBreakdown: document.querySelector("#meta-gender-breakdown"),
   metaAudienceScopeNote: document.querySelector("#meta-audience-scope-note")
@@ -265,12 +273,22 @@ function setReportControlsEnabled(enabled) {
   }
 }
 
-function destroyCharts() {
+ function destroyCharts() {
   state.trendChart?.destroy();
   state.mixChart?.destroy();
 
+  state.illuminAgeChart?.destroy();
+  state.illuminGenderChart?.destroy();
+  state.metaAgeChart?.destroy();
+  state.metaGenderChart?.destroy();
+
   state.trendChart = null;
   state.mixChart = null;
+
+  state.illuminAgeChart = null;
+  state.illuminGenderChart = null;
+  state.metaAgeChart = null;
+  state.metaGenderChart = null;
 }
 
 function resetReport() {
@@ -3190,6 +3208,146 @@ function createAudienceRows(
       );
 
       return row;
+    }
+  );
+}
+const audiencePalettes = {
+  meta: [
+    "#0f5f89",
+    "#1683ba",
+    "#3b9dcc",
+    "#67b5d8",
+    "#91c9e2",
+    "#baddeb",
+    "#dceef5"
+  ],
+
+  illumin: [
+    "#9e621c",
+    "#bd7424",
+    "#d8892d",
+    "#e29538",
+    "#e9aa5d",
+    "#efbd82",
+    "#f5d4ad"
+  ]
+};
+
+function audienceColors(
+  platform,
+  count
+) {
+  const palette =
+    audiencePalettes[platform] ?? [];
+
+  return Array.from(
+    { length: count },
+    (_, index) =>
+      palette[
+        index % palette.length
+      ]
+  );
+}
+
+function renderAudiencePieChart(
+  canvas,
+  categories,
+  platform,
+  metricLabel
+) {
+  if (
+    !canvas ||
+    categories.length === 0
+  ) {
+    return null;
+  }
+
+  const colors =
+    audienceColors(
+      platform,
+      categories.length
+    );
+
+  return new Chart(
+    canvas,
+    {
+      type: "pie",
+
+      data: {
+        labels:
+          categories.map(
+            (category) =>
+              normalizeGenderLabel(
+                category.label
+              )
+          ),
+
+        datasets: [
+          {
+            data:
+              categories.map(
+                (category) =>
+                  category.value
+              ),
+
+            backgroundColor:
+              colors,
+
+            borderColor:
+              "#ffffff",
+
+            borderWidth:
+              2
+          }
+        ]
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+
+        plugins: {
+          legend: {
+            position: "bottom",
+
+            labels: {
+              boxWidth: 10,
+              boxHeight: 10,
+              usePointStyle: true,
+              padding: 12
+            }
+          },
+
+          tooltip: {
+            callbacks: {
+              label(context) {
+                const total =
+                  context.dataset.data.reduce(
+                    (sum, value) =>
+                      sum + toNumber(value),
+                    0
+                  );
+
+                const value =
+                  toNumber(context.raw);
+
+                const share =
+                  safeDivide(
+                    value,
+                    total
+                  );
+
+                return (
+                  `${context.label}: ` +
+                  `${formatNumber(value)} ` +
+                  `${metricLabel} · ` +
+                  `${formatPercent(share, 1)}`
+                );
+              }
+            }
+          }
+        }
+      }
     }
   );
 }
