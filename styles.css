@@ -1753,9 +1753,9 @@ tbody tr:hover {
 
   #illumin-audience-section .audience-pie,
   #meta-audience-section .audience-pie {
-    width: 1.45in;
-    height: 1.45in;
-    margin: 0 auto 0.05in;
+    width: 1.3in;
+    height: 1.3in;
+    margin: 0 auto 0.035in;
   }
 
   #illumin-audience-section .audience-breakdown,
