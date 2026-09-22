@@ -3461,6 +3461,12 @@ function renderMetaAudienceSection() {
   }
 }
 function renderIlluminAudienceSection() {
+  state.illuminAgeChart?.destroy();
+  state.illuminGenderChart?.destroy();
+
+  state.illuminAgeChart = null;
+  state.illuminGenderChart = null;
+  
   const ageRows =
     filteredAudienceRows(
       "illumin",
@@ -3508,7 +3514,21 @@ function renderIlluminAudienceSection() {
         "views"
       )
     );
+  state.illuminAgeChart =
+    renderAudiencePieChart(
+      dom.illuminAgeCanvas,
+      ages,
+      "illumin",
+      "views"
+    );
 
+  state.illuminGenderChart =
+    renderAudiencePieChart(
+      dom.illuminGenderCanvas,
+      genders,
+      "illumin",
+      "views"
+    );
   dom.illuminAgeBreakdown.replaceChildren(
     ...createAudienceRows(
       ages,
