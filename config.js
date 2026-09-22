@@ -6,5 +6,8 @@ window.REPORT_CONFIG = {
     "https://performancedigital.app.n8n.cloud/webhook/campaign-report",
 
   adApiUrl:
-    "https://performancedigital.app.n8n.cloud/webhook/ad-report"
+    "https://performancedigital.app.n8n.cloud/webhook/ad-report",
+
+  audienceApiUrl:
+    "https://performancedigital.app.n8n.cloud/webhook/audience-report"
 };
