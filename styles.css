@@ -1533,7 +1533,9 @@ tbody tr:hover {
   .report-heading,
   .section-heading {
     margin-bottom: 0.1in;
+    break-inside: avoid-page;
     break-after: avoid-page;
+    page-break-inside: avoid;
     page-break-after: avoid;
   }
 
@@ -1579,6 +1581,13 @@ tbody tr:hover {
 
   .chart-wrap--trend {
     height: 2.5in;
+  }
+
+  .chart-wrap,
+  .mix-layout,
+  canvas {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   #platform-mix-section {
@@ -1647,6 +1656,10 @@ tbody tr:hover {
 
   thead {
     display: table-header-group;
+    break-inside: avoid-page;
+    break-after: avoid-page;
+    page-break-inside: avoid;
+    page-break-after: avoid;
   }
 
   tfoot {
@@ -1658,6 +1671,11 @@ tbody tr:hover {
   th {
     break-inside: avoid-page;
     page-break-inside: avoid;
+  }
+
+  tbody {
+    break-inside: auto;
+    page-break-inside: auto;
   }
 
   th,
@@ -1679,6 +1697,8 @@ tbody tr:hover {
 
   .campaign-id {
     font-size: 6px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .platform-section,
@@ -1708,8 +1728,17 @@ tbody tr:hover {
   .tactic-card__header,
   .audience-card__header,
   .video-panel .section-heading {
+    break-inside: avoid-page;
     break-after: avoid-page;
+    page-break-inside: avoid;
     page-break-after: avoid;
+  }
+
+  .platform-section > .section-heading + .table-scroll,
+  .tactic-card__header + .tactic-card__table,
+  .video-panel .section-heading + .video-steps {
+    break-before: avoid-page;
+    page-break-before: avoid;
   }
 
   .tactic-card__header {
@@ -1795,6 +1824,13 @@ tbody tr:hover {
   #meta-audience-scope-note {
     margin-top: 0.04in;
     font-size: 6px;
+  }
+
+  .audience-row,
+  .section-note,
+  .methodology-grid p {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
 
   .methodology-card {
