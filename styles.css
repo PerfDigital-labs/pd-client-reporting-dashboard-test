@@ -1474,11 +1474,20 @@ tbody tr:hover {
   }
 
   .print-report-header__brand {
-    color: var(--pd-blue-dark);
-    font-family: Fraunces, Georgia, serif;
-    font-size: 18px;
-    font-weight: 700;
-  }
+  display: flex;
+  align-items: center;
+  gap: 0.09in;
+  color: var(--pd-blue-dark);
+  font-family: Fraunces, Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.print-report-header__logo {
+  width: 0.38in;
+  height: 0.38in;
+  object-fit: contain;
+}
 
   .print-report-header > div:last-child {
     display: grid;
