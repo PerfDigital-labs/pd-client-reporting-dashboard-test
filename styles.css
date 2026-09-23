@@ -1451,9 +1451,10 @@ tbody tr:hover {
   .site-footer {
     display: none !important;
   }
-.methodology-card {
-    display: none !important;
-  }
+#report .methodology-card {
+  display: none !important;
+  visibility: hidden !important;
+}
   
   .dashboard-shell {
     padding: 0;
@@ -1531,13 +1532,12 @@ tbody tr:hover {
     display: contents;
   }
 
-  .report-summary,
-  .highlights-section,
-  .report-card--trend,
-  .methodology-card {
-    break-inside: avoid-page;
-    page-break-inside: avoid;
-  }
+.report-summary,
+.highlights-section,
+.report-card--trend {
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
 
   .report-heading,
   .section-heading {
@@ -1840,10 +1840,6 @@ tbody tr:hover {
   .methodology-grid p {
     break-inside: avoid-page;
     page-break-inside: avoid;
-  }
-
-  .methodology-card {
-    color: #ffffff;
   }
 
   .platform-section {
