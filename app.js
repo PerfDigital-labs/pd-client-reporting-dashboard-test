@@ -1235,9 +1235,6 @@ function createHighlightCard(
   numberElement.className =
     "highlight-card__number";
 
-  numberElement.textContent =
-    number;
-
   const titleElement =
     document.createElement(
       "strong"
