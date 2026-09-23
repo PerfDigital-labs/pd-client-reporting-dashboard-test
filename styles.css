@@ -1451,7 +1451,10 @@ tbody tr:hover {
   .site-footer {
     display: none !important;
   }
-
+.methodology-card {
+    display: none !important;
+  }
+  
   .dashboard-shell {
     padding: 0;
   }
