@@ -803,14 +803,30 @@ button:focus-visible {
 .highlight-card {
   position: relative;
   min-width: 0;
-  padding: 0.9rem 0.95rem 0.95rem;
+  padding: 0.9rem 0.95rem 0.95rem 2.85rem;
   border: 1px solid var(--border);
   border-radius: 9px;
   background: #ffffff;
 }
 
 .highlight-card__number {
-  display: none;
+  position: absolute;
+  top: 0.92rem;
+  left: 0.9rem;
+  width: 1.45rem;
+  height: 1.45rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--navy-deep);
+}
+
+.highlight-card--illumin .highlight-card__number {
+  background: var(--illumin);
+}
+
+.highlight-card--meta .highlight-card__number {
+  background: var(--meta);
 }
 
 .highlight-card strong,
