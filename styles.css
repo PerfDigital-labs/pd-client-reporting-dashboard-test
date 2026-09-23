@@ -803,33 +803,14 @@ button:focus-visible {
 .highlight-card {
   position: relative;
   min-width: 0;
-  padding: 0.9rem 0.95rem 0.95rem 2.85rem;
+  padding: 0.9rem 0.95rem 0.95rem;
   border: 1px solid var(--border);
   border-radius: 9px;
   background: #ffffff;
 }
 
 .highlight-card__number {
-  position: absolute;
-  top: 0.92rem;
-  left: 0.9rem;
-  width: 1.45rem;
-  height: 1.45rem;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: #ffffff;
-  background: var(--navy-deep);
-  font-size: 0.67rem;
-  font-weight: 800;
-}
-
-.highlight-card--illumin .highlight-card__number {
-  background: var(--illumin);
-}
-
-.highlight-card--meta .highlight-card__number {
-  background: var(--meta);
+  display: none;
 }
 
 .highlight-card strong,
