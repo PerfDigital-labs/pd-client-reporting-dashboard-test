@@ -48,6 +48,9 @@ const dom = {
   illuminSection: document.querySelector("#illumin-section"),
   illuminSummary: document.querySelector("#illumin-summary"),
   illuminCampaignBody: document.querySelector("#illumin-campaign-body"),
+  illuminConversionMapping: document.querySelector("#illumin-conversion-mapping"),
+  illuminConversionMappingSummary: document.querySelector("#illumin-conversion-mapping-summary"),
+  illuminConversionPeriods: document.querySelector("#illumin-conversion-periods"),
   illuminVideo: document.querySelector("#illumin-video"),
   videoSteps: document.querySelector("#video-steps"),
   metaSection: document.querySelector("#meta-section"),
@@ -1098,6 +1101,36 @@ function renderKpis() {
         "tertiary_conv"
       );
 
+    const conversionMappingPeriods =
+      getIlluminConversionMappingPeriods(
+        rows
+      );
+
+    const hasMultipleConversionDefinitions =
+      conversionMappingPeriods.filter(
+        (period) =>
+          period.status ===
+          "MAPPED"
+      ).length > 1;
+
+    const hasConversionMappingGap =
+      conversionMappingPeriods.some(
+        (period) =>
+          period.status !==
+          "MAPPED"
+      );
+
+    const conversionDetail =
+      hasMultipleConversionDefinitions ||
+      hasConversionMappingGap
+        ? "Conversion definitions vary or are unavailable in this range · see mapping below"
+        : formatNumber(primary) +
+          " primary · " +
+          formatNumber(secondary) +
+          " secondary · " +
+          formatNumber(tertiary) +
+          " tertiary";
+
     cards.push(
       createKpiCard(
         "illumin",
@@ -1131,13 +1164,7 @@ function renderKpis() {
         formatCompact(
           conversions
         ),
-        `${formatNumber(
-          primary
-        )} primary · ${formatNumber(
-          secondary
-        )} secondary · ${formatNumber(
-          tertiary
-        )} tertiary`,
+        conversionDetail,
         conversions
       )
     );
@@ -2118,6 +2145,452 @@ function appendValueCell(
   row.append(cell);
 }
 
+
+function getIlluminConversionMappingPeriods(
+  rows
+) {
+  const periods =
+    new Map();
+
+  for (const row of rows) {
+    const status =
+      String(
+        row.conversion_mapping_status ??
+          "NO_CONFIG"
+      );
+
+    const period = {
+      status,
+      reason:
+        row.conversion_mapping_reason ??
+        null,
+      startDate:
+        row.conversion_mapping_start_date ??
+        null,
+      endDate:
+        row.conversion_mapping_end_date ??
+        null,
+      primaryLabel:
+        row.primary_conversion_label ??
+        null,
+      secondaryLabel:
+        row.secondary_conversion_label ??
+        null,
+      tertiaryLabel:
+        row.tertiary_conversion_label ??
+        null,
+      notes:
+        row.conversion_mapping_notes ??
+        null
+    };
+
+    const key =
+      JSON.stringify([
+        period.status,
+        period.reason,
+        period.startDate,
+        period.endDate,
+        period.primaryLabel,
+        period.secondaryLabel,
+        period.tertiaryLabel,
+        period.notes
+      ]);
+
+    if (!periods.has(key)) {
+      periods.set(
+        key,
+        {
+          ...period,
+          observedStartDate:
+            row.date ?? null,
+          observedEndDate:
+            row.date ?? null
+        }
+      );
+
+      continue;
+    }
+
+    const existing =
+      periods.get(key);
+
+    if (
+      row.date &&
+      (
+        !existing.observedStartDate ||
+        row.date <
+          existing.observedStartDate
+      )
+    ) {
+      existing.observedStartDate =
+        row.date;
+    }
+
+    if (
+      row.date &&
+      (
+        !existing.observedEndDate ||
+        row.date >
+          existing.observedEndDate
+      )
+    ) {
+      existing.observedEndDate =
+        row.date;
+    }
+  }
+
+  return [
+    ...periods.values()
+  ].sort(
+    (
+      first,
+      second
+    ) => {
+      const firstDate =
+        first.startDate ??
+        first.observedStartDate ??
+        "";
+
+      const secondDate =
+        second.startDate ??
+        second.observedStartDate ??
+        "";
+
+      return firstDate.localeCompare(
+        secondDate
+      );
+    }
+  );
+}
+
+function formatConversionMappingPeriod(
+  period
+) {
+  if (
+    period.startDate &&
+    period.endDate
+  ) {
+    return (
+      formatDate(
+        period.startDate
+      ) +
+      " – " +
+      formatDate(
+        period.endDate
+      )
+    );
+  }
+
+  if (period.startDate) {
+    return (
+      formatDate(
+        period.startDate
+      ) +
+      " onward"
+    );
+  }
+
+  if (
+    period.observedStartDate &&
+    period.observedEndDate
+  ) {
+    return (
+      "Selected data: " +
+      formatDateRange(
+        period.observedStartDate,
+        period.observedEndDate
+      )
+    );
+  }
+
+  return "Selected reporting period";
+}
+
+function conversionMappingStatusLabel(
+  status
+) {
+  if (status === "MAPPED") {
+    return "Mapped";
+  }
+
+  if (status === "UNAVAILABLE") {
+    return "Unavailable";
+  }
+
+  if (status === "NO_CONFIG") {
+    return "Not configured";
+  }
+
+  if (
+    status ===
+    "UNEXPECTED_UNMAPPED"
+  ) {
+    return "Mapping gap";
+  }
+
+  return status;
+}
+
+function createConversionDefinition(
+  label,
+  value
+) {
+  const definition =
+    document.createElement(
+      "div"
+    );
+
+  definition.className =
+    "conversion-definition";
+
+  const labelElement =
+    document.createElement(
+      "span"
+    );
+
+  labelElement.textContent =
+    label;
+
+  const valueElement =
+    document.createElement(
+      "strong"
+    );
+
+  valueElement.textContent =
+    value ||
+    "Not configured";
+
+  definition.append(
+    labelElement,
+    valueElement
+  );
+
+  return definition;
+}
+
+function renderIlluminConversionMapping(
+  rows
+) {
+  const periods =
+    getIlluminConversionMappingPeriods(
+      rows
+    );
+
+  const showMapping =
+    periods.length > 0;
+
+  dom.illuminConversionMapping.hidden =
+    !showMapping;
+
+  if (!showMapping) {
+    dom.illuminConversionPeriods.replaceChildren();
+    return;
+  }
+
+  const mappedPeriods =
+    periods.filter(
+      (period) =>
+        period.status ===
+        "MAPPED"
+    );
+
+  const hasUnavailable =
+    periods.some(
+      (period) =>
+        period.status ===
+        "UNAVAILABLE"
+    );
+
+  const hasNoConfig =
+    periods.some(
+      (period) =>
+        period.status ===
+        "NO_CONFIG"
+    );
+
+  const hasUnexpectedGap =
+    periods.some(
+      (period) =>
+        period.status ===
+        "UNEXPECTED_UNMAPPED"
+    );
+
+  if (
+    periods.length === 1 &&
+    mappedPeriods.length === 1
+  ) {
+    dom.illuminConversionMappingSummary.textContent =
+      "Conversion definitions for the selected reporting period.";
+  } else if (
+    periods.length === 1 &&
+    hasUnavailable
+  ) {
+    dom.illuminConversionMappingSummary.textContent =
+      "No confirmed conversion mapping is available for this reporting period.";
+  } else if (
+    periods.length === 1 &&
+    hasNoConfig
+  ) {
+    dom.illuminConversionMappingSummary.textContent =
+      "Conversion labels are not configured for this Programmatic data.";
+  } else if (
+    hasUnexpectedGap
+  ) {
+    dom.illuminConversionMappingSummary.textContent =
+      "A conversion-mapping gap was detected in the selected reporting period. Review the periods below.";
+  } else {
+    dom.illuminConversionMappingSummary.textContent =
+      "Conversion definitions changed or were unavailable during part of the selected reporting period. Periods are shown separately.";
+  }
+
+  const periodCards =
+    periods.map(
+      (period) => {
+        const card =
+          document.createElement(
+            "article"
+          );
+
+        const statusClass =
+          period.status
+            .toLowerCase()
+            .replaceAll(
+              "_",
+              "-"
+            );
+
+        card.className =
+          "conversion-period conversion-period--" +
+          statusClass;
+
+        const header =
+          document.createElement(
+            "div"
+          );
+
+        header.className =
+          "conversion-period__header";
+
+        const status =
+          document.createElement(
+            "span"
+          );
+
+        status.className =
+          "conversion-period__status";
+
+        status.textContent =
+          conversionMappingStatusLabel(
+            period.status
+          );
+
+        const dateRange =
+          document.createElement(
+            "strong"
+          );
+
+        dateRange.className =
+          "conversion-period__dates";
+
+        dateRange.textContent =
+          formatConversionMappingPeriod(
+            period
+          );
+
+        header.append(
+          status,
+          dateRange
+        );
+
+        card.append(header);
+
+        if (
+          period.status ===
+          "MAPPED"
+        ) {
+          const definitions =
+            document.createElement(
+              "div"
+            );
+
+          definitions.className =
+            "conversion-definition-grid";
+
+          definitions.append(
+            createConversionDefinition(
+              "Primary",
+              period.primaryLabel
+            ),
+            createConversionDefinition(
+              "Secondary",
+              period.secondaryLabel
+            ),
+            createConversionDefinition(
+              "Tertiary",
+              period.tertiaryLabel
+            )
+          );
+
+          card.append(
+            definitions
+          );
+        } else {
+          const message =
+            document.createElement(
+              "p"
+            );
+
+          message.className =
+            "conversion-period__message";
+
+          if (period.notes) {
+            message.textContent =
+              period.notes;
+          } else if (
+            period.status ===
+            "NO_CONFIG"
+          ) {
+            message.textContent =
+              "No conversion configuration has been added for this journey.";
+          } else if (
+            period.status ===
+            "UNEXPECTED_UNMAPPED"
+          ) {
+            message.textContent =
+              "This journey has conversion configuration, but this date is not covered by an effective mapping period.";
+          } else {
+            message.textContent =
+              "No confirmed conversion mapping is available for this period.";
+          }
+
+          card.append(message);
+
+          if (period.reason) {
+            const reason =
+              document.createElement(
+                "small"
+              );
+
+            reason.className =
+              "conversion-period__reason";
+
+            reason.textContent =
+              "Reason: " +
+              period.reason;
+
+            card.append(reason);
+          }
+        }
+
+        return card;
+      }
+    );
+
+  dom.illuminConversionPeriods.replaceChildren(
+    ...periodCards
+  );
+}
+
 function renderIlluminSection() {
   const rows =
     filteredRows("illumin");
@@ -2132,6 +2605,9 @@ function renderIlluminSection() {
     !showSection;
 
   if (!showSection) {
+    dom.illuminConversionMapping.hidden =
+      true;
+
     dom.illuminVideo.hidden =
       true;
 
@@ -2243,6 +2719,10 @@ function renderIlluminSection() {
 
   dom.illuminCampaignBody.replaceChildren(
     ...tableRows
+  );
+
+  renderIlluminConversionMapping(
+    rows
   );
 
   const videoStarts =

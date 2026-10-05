@@ -1231,6 +1231,131 @@ tbody tr:hover {
     height: 230px;
   }
 }
+.conversion-mapping-panel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--illumin);
+  border-radius: 10px;
+  background: var(--illumin-soft);
+}
+
+.conversion-mapping-panel__header {
+  margin-bottom: 0.8rem;
+}
+
+.conversion-mapping-panel__header h4 {
+  margin: 0;
+  color: var(--navy-deep);
+  font-family: Fraunces, Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+}
+
+.conversion-mapping-panel__header p:last-child {
+  margin: 0.25rem 0 0;
+  color: var(--slate);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.conversion-periods {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.conversion-period {
+  padding: 0.8rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.conversion-period--unavailable,
+.conversion-period--no-config,
+.conversion-period--unexpected-unmapped {
+  border-style: dashed;
+}
+
+.conversion-period__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.conversion-period__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: #f1f5f7;
+  color: var(--slate);
+  font-size: 0.61rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.conversion-period--mapped .conversion-period__status {
+  background: var(--illumin-soft);
+  color: var(--illumin-dark);
+}
+
+.conversion-period__dates {
+  color: var(--navy-deep);
+  font-size: 0.72rem;
+  text-align: right;
+}
+
+.conversion-definition-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.conversion-definition {
+  min-width: 0;
+  padding: 0.7rem;
+  border-radius: 8px;
+  background: #f8fafb;
+}
+
+.conversion-definition span,
+.conversion-definition strong {
+  display: block;
+}
+
+.conversion-definition span {
+  margin-bottom: 0.25rem;
+  color: #5c7080;
+  font-size: 0.61rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.conversion-definition strong {
+  color: var(--navy-deep);
+  font-size: 0.73rem;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+.conversion-period__message {
+  margin: 0;
+  color: var(--slate);
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+.conversion-period__reason {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--slate);
+  font-size: 0.63rem;
+}
+
 .section-note {
   margin: 0.85rem 0 0;
   color: var(--slate);
@@ -1328,6 +1453,10 @@ tbody tr:hover {
 
   .video-steps {
     grid-template-columns: repeat(2, minmax(120px, 1fr));
+  }
+
+  .conversion-definition-grid {
+    grid-template-columns: 1fr;
   }
 }
 
