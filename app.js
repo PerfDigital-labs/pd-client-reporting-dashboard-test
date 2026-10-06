@@ -1585,7 +1585,7 @@ function renderTrendChart() {
         ),
 
         borderColor:
-          "#14658d",
+          "#1f2933",
 
         borderDash: [
           5,
@@ -1641,7 +1641,7 @@ function renderTrendChart() {
         ),
 
         borderColor:
-          "#9a611c",
+          "#d64545",
 
         borderDash: [
           5,
