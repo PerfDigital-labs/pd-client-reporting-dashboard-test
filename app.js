@@ -1684,9 +1684,9 @@ function renderTrendChart() {
               align: "start",
 
               labels: {
-                usePointStyle: true,
-                boxWidth: 8,
-                boxHeight: 8
+                usePointStyle: false,
+                boxWidth: 22,
+                boxHeight: 2
               }
             },
 
