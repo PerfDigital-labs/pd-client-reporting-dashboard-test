@@ -1045,57 +1045,57 @@ tbody tr:hover {
   }
 }
 .video-panel {
-  margin-top: 1.25rem;
-  padding-top: 1.15rem;
+  margin-top: 0.75rem;
+  padding-top: 0.65rem;
   border-top: 1px solid var(--border);
 }
 
 .video-steps {
   display: grid;
-  gap: 0.9rem;
+  gap: 0.6rem;
 }
 
 .video-step {
   display: grid;
-  gap: 0.45rem;
+  gap: 0.25rem;
 }
 
 .video-step__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.65rem;
 }
 
 .video-step__label {
   color: var(--navy-deep);
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   font-weight: 700;
 }
 
 .video-step__metrics {
   display: flex;
   align-items: baseline;
-  gap: 0.55rem;
+  gap: 0.4rem;
   flex-shrink: 0;
 }
 
 .video-step__metrics strong {
   color: var(--navy-deep);
   font-family: Fraunces, Georgia, "Times New Roman", serif;
-  font-size: 1rem;
+  font-size: 0.92rem;
 }
 
 .video-step__metrics small {
-  min-width: 3.5rem;
+  min-width: 3rem;
   color: var(--slate);
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   text-align: right;
 }
 
 .video-step__track {
   width: 100%;
-  height: 10px;
+  height: 8px;
   overflow: hidden;
   border-radius: 999px;
   background: #dfe7eb;
@@ -1232,8 +1232,8 @@ tbody tr:hover {
   }
 }
 .conversion-mapping-panel {
-  margin-top: 1rem;
-  padding: 1rem;
+  margin-top: 0.7rem;
+  padding: 0.7rem;
   border: 1px solid var(--border);
   border-left: 4px solid var(--illumin);
   border-radius: 10px;
@@ -1241,30 +1241,30 @@ tbody tr:hover {
 }
 
 .conversion-mapping-panel__header {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
 }
 
 .conversion-mapping-panel__header h4 {
   margin: 0;
   color: var(--navy-deep);
   font-family: Fraunces, Georgia, "Times New Roman", serif;
-  font-size: 1rem;
+  font-size: 0.92rem;
 }
 
 .conversion-mapping-panel__header p:last-child {
-  margin: 0.25rem 0 0;
+  margin: 0.15rem 0 0;
   color: var(--slate);
-  font-size: 0.74rem;
-  line-height: 1.45;
+  font-size: 0.69rem;
+  line-height: 1.35;
 }
 
 .conversion-periods {
   display: grid;
-  gap: 0.7rem;
+  gap: 0.5rem;
 }
 
 .conversion-period {
-  padding: 0.8rem 0.85rem;
+  padding: 0.55rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: 9px;
   background: var(--surface);
@@ -1280,18 +1280,18 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
-  margin-bottom: 0.65rem;
+  gap: 0.55rem;
+  margin-bottom: 0.4rem;
 }
 
 .conversion-period__status {
   display: inline-flex;
   align-items: center;
-  padding: 0.2rem 0.45rem;
+  padding: 0.14rem 0.36rem;
   border-radius: 999px;
   background: #f1f5f7;
   color: var(--slate);
-  font-size: 0.61rem;
+  font-size: 0.56rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1304,19 +1304,19 @@ tbody tr:hover {
 
 .conversion-period__dates {
   color: var(--navy-deep);
-  font-size: 0.72rem;
+  font-size: 0.67rem;
   text-align: right;
 }
 
 .conversion-definition-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.7rem;
+  gap: 0.45rem;
 }
 
 .conversion-definition {
   min-width: 0;
-  padding: 0.7rem;
+  padding: 0.45rem 0.55rem;
   border-radius: 8px;
   background: #f8fafb;
 }
@@ -1327,9 +1327,9 @@ tbody tr:hover {
 }
 
 .conversion-definition span {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.12rem;
   color: #5c7080;
-  font-size: 0.61rem;
+  font-size: 0.56rem;
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -1337,23 +1337,23 @@ tbody tr:hover {
 
 .conversion-definition strong {
   color: var(--navy-deep);
-  font-size: 0.73rem;
-  line-height: 1.4;
+  font-size: 0.68rem;
+  line-height: 1.28;
   white-space: pre-line;
 }
 
 .conversion-period__message {
   margin: 0;
   color: var(--slate);
-  font-size: 0.74rem;
-  line-height: 1.45;
+  font-size: 0.69rem;
+  line-height: 1.35;
 }
 
 .conversion-period__reason {
   display: block;
-  margin-top: 0.4rem;
+  margin-top: 0.25rem;
   color: var(--slate);
-  font-size: 0.63rem;
+  font-size: 0.6rem;
 }
 
 .section-note {
@@ -1974,6 +1974,54 @@ tbody tr:hover {
   .platform-section {
     break-before: auto;
     page-break-before: auto;
+  }
+
+
+  .conversion-mapping-panel {
+    margin-top: 0.05in;
+    padding: 0.07in;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .conversion-mapping-panel__header {
+    margin-bottom: 0.04in;
+  }
+
+  .conversion-period {
+    padding: 0.05in 0.06in;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .conversion-period__header {
+    margin-bottom: 0.035in;
+  }
+
+  .conversion-definition-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.04in;
+  }
+
+  .conversion-definition {
+    padding: 0.04in 0.05in;
+  }
+
+  .video-panel {
+    margin-top: 0.05in;
+    padding-top: 0.05in;
+  }
+
+  .video-steps {
+    gap: 0.045in 0.08in;
+  }
+
+  .video-step {
+    gap: 0.02in;
+  }
+
+  .video-step__track {
+    height: 6px;
   }
 
   p,
